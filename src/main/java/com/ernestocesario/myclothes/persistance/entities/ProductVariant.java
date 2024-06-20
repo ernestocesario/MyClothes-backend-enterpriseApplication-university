@@ -46,5 +46,8 @@ public class ProductVariant {
     private Product product;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL)
+    private List<ProductPicture> pictures;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL)
     private List<OrderProduct> orderProducts;
 }

@@ -50,7 +50,7 @@ public class Order {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderProduct> products;
+    private List<OrderProduct> orderProducts;
 
 
     //private methods

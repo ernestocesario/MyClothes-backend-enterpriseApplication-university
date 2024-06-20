@@ -35,12 +35,6 @@ public class Product {
 
     //associations
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductPicture> pictures;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
     @NotEmpty
-    private List<ProductVariant> variants;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
-    private List<OrderProduct> orders;
+    private List<ProductVariant> productVariants;
 }

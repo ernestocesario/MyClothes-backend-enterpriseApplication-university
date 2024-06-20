@@ -32,8 +32,5 @@ public class OrderProduct {
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private ProductVariant productVariant;
 }
