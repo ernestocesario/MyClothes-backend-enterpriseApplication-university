@@ -28,6 +28,6 @@ public class DiscountCode {
 
     //associations
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 }

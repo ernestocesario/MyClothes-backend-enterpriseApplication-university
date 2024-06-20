@@ -42,7 +42,8 @@ public class ProductVariant {
 
 
     //associations
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL)
@@ -50,4 +51,13 @@ public class ProductVariant {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL)
     private List<OrderProduct> orderProducts;
+
+    @ManyToMany(mappedBy = "productVariants")
+    private List<Wishlist> wishlists;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL)
+    private List<CartElement> cartElements;
 }

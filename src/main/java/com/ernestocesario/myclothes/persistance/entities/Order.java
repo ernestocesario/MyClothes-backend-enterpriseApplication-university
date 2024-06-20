@@ -37,6 +37,16 @@ public class Order {
     @Transient
     private double totalPrice;
 
+    @AttributeOverrides({
+            @AttributeOverride(name = "firstName", column = @Column(nullable = false)),
+            @AttributeOverride(name = "lastName", column = @Column(nullable = false)),
+            @AttributeOverride(name = "phoneNumber", column = @Column(nullable = false)),
+            @AttributeOverride(name = "street", column = @Column(nullable = false)),
+            @AttributeOverride(name = "civicNumber", column = @Column(nullable = false)),
+            @AttributeOverride(name = "city", column = @Column(nullable = false)),
+            @AttributeOverride(name = "state", column = @Column(nullable = false)),
+            @AttributeOverride(name = "zipCode", column = @Column(nullable = false))
+    })
     private UserShippingInfo shippingInfo;
 
     @Column(name = "status", nullable = false)
@@ -46,7 +56,8 @@ public class Order {
 
 
     //associations
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
