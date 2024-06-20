@@ -1,0 +1,33 @@
+package com.ernestocesario.myclothes.persistance.entities;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "discount_codes")
+@NoArgsConstructor
+@Data
+public class DiscountCode {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
+
+    @Column(name = "discount_percentage", nullable = false)
+    @Size(min = 1, max = 100)
+    private int discountPercentage;
+
+    @Column(name = "used", nullable = false, columnDefinition = "boolean default false")
+    private boolean used;
+
+
+
+    //associations
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+}
