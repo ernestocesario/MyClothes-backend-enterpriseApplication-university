@@ -20,7 +20,6 @@ public class MyClothesBackendEnterpriseApplicationUniversityApplication {
     @Bean
     public CommandLineRunner test(UserRepository userRepository, AdminRepository adminRepository) {
         return (args) -> {
-            //userRepository.save(new User());
         };
     }
 }

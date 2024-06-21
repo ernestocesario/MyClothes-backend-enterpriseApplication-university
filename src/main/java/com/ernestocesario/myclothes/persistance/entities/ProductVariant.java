@@ -24,7 +24,9 @@ public class ProductVariant {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "style", nullable = false)  //it can be anything, from color to shape, ... but not size
+    //it can be anything, from color to shape, ... but not size.
+    // If a product do not have different style, it can be empty but not nullable in the db
+    @Column(name = "style", nullable = false)
     private String style;
 
     @Column(name = "size", nullable = false)

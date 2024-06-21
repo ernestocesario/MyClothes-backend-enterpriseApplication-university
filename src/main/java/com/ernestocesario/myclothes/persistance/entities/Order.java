@@ -1,5 +1,6 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
+import com.ernestocesario.myclothes.persistance.entities.utils.FullProductInstance;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderProduct;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderStatus;
 import com.ernestocesario.myclothes.persistance.entities.utils.UserShippingInfo;

@@ -43,6 +43,18 @@ public class User {
     @LastModifiedDate
     private LocalDateTime lastModificationDate;
 
+    @AttributeOverrides({
+            @AttributeOverride(name = "firstName", column = @Column(nullable = false)),
+            @AttributeOverride(name = "lastName", column = @Column(nullable = false)),
+            @AttributeOverride(name = "phoneNumber", column = @Column(nullable = false)),
+            @AttributeOverride(name = "street", column = @Column(nullable = false)),
+            @AttributeOverride(name = "civicNumber", column = @Column(nullable = false)),
+            @AttributeOverride(name = "city", column = @Column(nullable = false)),
+            @AttributeOverride(name = "state", column = @Column(nullable = false)),
+            @AttributeOverride(name = "zipCode", column = @Column(nullable = false))
+    })
+    private UserShippingInfo shippingInfo;
+
 
 
     //associations
@@ -66,16 +78,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CartElement> cartElements;
-
-    @AttributeOverrides({
-            @AttributeOverride(name = "firstName", column = @Column(nullable = false)),
-            @AttributeOverride(name = "lastName", column = @Column(nullable = false)),
-            @AttributeOverride(name = "phoneNumber", column = @Column(nullable = false)),
-            @AttributeOverride(name = "street", column = @Column(nullable = false)),
-            @AttributeOverride(name = "civicNumber", column = @Column(nullable = false)),
-            @AttributeOverride(name = "city", column = @Column(nullable = false)),
-            @AttributeOverride(name = "state", column = @Column(nullable = false)),
-            @AttributeOverride(name = "zipCode", column = @Column(nullable = false))
-    })
-    private UserShippingInfo shippingInfo;
 }

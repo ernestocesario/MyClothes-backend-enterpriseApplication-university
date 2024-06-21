@@ -20,9 +20,17 @@ public class OrderProduct {
     @Positive
     private int quantity;
 
-    @Column(name = "price", nullable = false)
-    @Positive
-    private double price;
+    @AttributeOverrides({
+            @AttributeOverride(name = "brand", column = @Column(nullable = false)),
+            @AttributeOverride(name = "name", column = @Column(nullable = false)),
+            @AttributeOverride(name = "description", column = @Column(nullable = false)),
+            @AttributeOverride(name = "category", column = @Column(nullable = false)),
+            @AttributeOverride(name = "gender", column = @Column(nullable = false)),
+            @AttributeOverride(name = "style", column = @Column(nullable = false)),
+            @AttributeOverride(name = "size", column = @Column(nullable = false)),
+            @AttributeOverride(name = "price", column = @Column(nullable = false)),
+    })
+    private FullProductInstance fullProductInstance;
 
 
 

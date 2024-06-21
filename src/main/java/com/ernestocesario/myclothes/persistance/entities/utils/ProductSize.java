@@ -7,5 +7,6 @@ public enum ProductSize {
     L,
     XL,
     XXL,
-    XXXL
+    XXXL,
+    NONE
 }
