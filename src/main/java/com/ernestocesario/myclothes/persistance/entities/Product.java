@@ -34,7 +34,7 @@ public class Product {
 
 
     //associations
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @NotEmpty
     private List<ProductVariant> productVariants;
 }

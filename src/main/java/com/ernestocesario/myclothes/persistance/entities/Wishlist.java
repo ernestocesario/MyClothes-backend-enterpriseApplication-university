@@ -1,6 +1,7 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,10 +22,11 @@ public class Wishlist {
 
 
     //associations
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "wishlist", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @NotEmpty
     private List<WishlistAccess> wishlistAccesses;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "wishlist_products",
             joinColumns = @JoinColumn(name = "wishlist_id"),

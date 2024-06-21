@@ -1,7 +1,6 @@
 package com.ernestocesario.myclothes.persistance.entities.utils;
 
 import com.ernestocesario.myclothes.persistance.entities.Order;
-import com.ernestocesario.myclothes.persistance.entities.Product;
 import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
@@ -28,9 +27,11 @@ public class OrderProduct {
 
 
     //associations
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "product_variant_id", nullable = false)
     private ProductVariant productVariant;
 }

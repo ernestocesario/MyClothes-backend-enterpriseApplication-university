@@ -19,7 +19,7 @@ public class CartElement {
 
 
     //associations
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "product_variant_id", nullable = false)
     private ProductVariant productVariant;
 
