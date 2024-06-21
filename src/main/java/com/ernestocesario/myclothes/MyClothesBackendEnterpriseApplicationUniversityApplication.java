@@ -1,6 +1,5 @@
 package com.ernestocesario.myclothes;
 
-import com.ernestocesario.myclothes.persistance.entities.User;
 import com.ernestocesario.myclothes.persistance.repositories.AdminRepository;
 import com.ernestocesario.myclothes.persistance.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +19,7 @@ public class MyClothesBackendEnterpriseApplicationUniversityApplication {
     @Bean
     public CommandLineRunner test(UserRepository userRepository, AdminRepository adminRepository) {
         return (args) -> {
+
         };
     }
 }
