@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class FullProductInstance {
+public class ProductSnapshot {
     private String brand;
     private String name;
     private String description;

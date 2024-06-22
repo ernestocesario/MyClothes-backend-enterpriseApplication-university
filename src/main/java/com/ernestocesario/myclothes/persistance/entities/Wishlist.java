@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Wishlist {
     //associations
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
     @NotEmpty
-    private List<WishlistAccess> wishlistAccesses;
+    private List<WishlistAccess> wishlistAccesses = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -32,5 +33,5 @@ public class Wishlist {
             joinColumns = @JoinColumn(name = "wishlist_id"),
             inverseJoinColumns = @JoinColumn(name = "product_variant_id")
     )
-    private List<ProductVariant> productVariants;
+    private List<ProductVariant> productVariants = new ArrayList<>();
 }

@@ -30,7 +30,7 @@ public class OrderProduct {
             @AttributeOverride(name = "size", column = @Column(nullable = false)),
             @AttributeOverride(name = "price", column = @Column(nullable = false)),
     })
-    private FullProductInstance fullProductInstance;
+    private ProductSnapshot productSnapshot;
 
 
 

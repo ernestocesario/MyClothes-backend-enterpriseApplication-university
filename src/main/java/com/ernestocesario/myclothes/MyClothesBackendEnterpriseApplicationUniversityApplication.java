@@ -1,7 +1,6 @@
 package com.ernestocesario.myclothes;
 
-import com.ernestocesario.myclothes.persistance.repositories.AdminRepository;
-import com.ernestocesario.myclothes.persistance.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,10 +15,13 @@ public class MyClothesBackendEnterpriseApplicationUniversityApplication {
         SpringApplication.run(MyClothesBackendEnterpriseApplicationUniversityApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner test(UserRepository userRepository, AdminRepository adminRepository) {
-        return (args) -> {
+    @Autowired
+    private TestService testService;
 
+    @Bean
+    public CommandLineRunner test() {
+        return (args) -> {
+            testService.test1();
         };
     }
 }

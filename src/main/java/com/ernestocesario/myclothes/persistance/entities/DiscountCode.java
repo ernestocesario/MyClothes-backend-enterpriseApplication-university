@@ -14,7 +14,7 @@ public class DiscountCode {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", nullable = false)
     private String code;
 
     @Column(name = "discount_percentage", nullable = false)

@@ -1,6 +1,7 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,8 @@ public class CartElement {
     private String id;
 
     @Column(name = "quantity", nullable = false)
-    private String quantity;
+    @Positive
+    private int quantity;
 
 
 

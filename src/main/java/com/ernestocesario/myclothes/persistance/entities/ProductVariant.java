@@ -9,6 +9,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,17 +50,17 @@ public class ProductVariant {
     private Product product;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductPicture> pictures;
+    private List<ProductPicture> pictures = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderProduct> orderProducts;
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @ManyToMany(mappedBy = "productVariants", fetch = FetchType.LAZY)
-    private List<Wishlist> wishlists;
+    private List<Wishlist> wishlists = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartElement> cartElements;
+    private List<CartElement> cartElements = new ArrayList<>();
 }

@@ -1,6 +1,5 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
-import com.ernestocesario.myclothes.persistance.entities.utils.FullProductInstance;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderProduct;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderStatus;
 import com.ernestocesario.myclothes.persistance.entities.utils.UserShippingInfo;
@@ -10,20 +9,23 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 @NoArgsConstructor
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "order_date", nullable = false)
+    @Column(name = "order_date")
     @CreatedDate
     private LocalDateTime orderDate;
 
@@ -62,7 +64,7 @@ public class Order {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderProduct> orderProducts;
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
 
     //private methods
