@@ -26,6 +26,6 @@ public class WishlistAccess {
     private Wishlist wishlist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
+    @JoinColumn(name = "customer_id", nullable = true)
+    private Customer customer;
 }

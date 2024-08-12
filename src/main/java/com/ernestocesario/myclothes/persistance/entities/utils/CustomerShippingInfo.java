@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserShippingInfo {
+public class CustomerShippingInfo {
     private String firstName;
     private String lastName;
     private String phoneNumber;

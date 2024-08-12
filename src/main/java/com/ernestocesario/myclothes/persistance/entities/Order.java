@@ -2,7 +2,7 @@ package com.ernestocesario.myclothes.persistance.entities;
 
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderProduct;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderStatus;
-import com.ernestocesario.myclothes.persistance.entities.utils.UserShippingInfo;
+import com.ernestocesario.myclothes.persistance.entities.utils.CustomerShippingInfo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -50,7 +50,7 @@ public class Order {
             @AttributeOverride(name = "state", column = @Column(nullable = false)),
             @AttributeOverride(name = "zipCode", column = @Column(nullable = false))
     })
-    private UserShippingInfo shippingInfo;
+    private CustomerShippingInfo shippingInfo;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -60,8 +60,8 @@ public class Order {
 
     //associations
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderProduct> orderProducts = new ArrayList<>();
