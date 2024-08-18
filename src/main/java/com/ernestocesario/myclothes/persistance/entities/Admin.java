@@ -16,9 +16,8 @@ import java.util.List;
 @Data
 public class Admin extends User {
 
+
+    //associations
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Message> messages = new ArrayList<>();
-
-    @Column(name = "kk", nullable = false)
-    private String kk = "ciao";
 }

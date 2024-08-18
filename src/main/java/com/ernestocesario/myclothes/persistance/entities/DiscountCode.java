@@ -27,7 +27,7 @@ public class DiscountCode {
 
 
     //associations
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "customer_id", nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 }

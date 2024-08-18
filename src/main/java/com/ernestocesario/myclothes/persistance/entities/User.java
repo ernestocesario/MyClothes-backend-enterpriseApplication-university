@@ -46,4 +46,9 @@ public class User {
 
         return null;
     }
+
+
+    //associations
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private AuthToken authToken;
 }

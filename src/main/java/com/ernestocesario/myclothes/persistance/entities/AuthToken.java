@@ -9,30 +9,28 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "AuthTokens")
 @NoArgsConstructor
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class Message {
+public class AuthToken {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "content", nullable = false)
-    private String content;
-
-    @Column(name = "creation_date")
+    @Column(name = "creation_time")
     @CreatedDate
-    private LocalDateTime creationDate;
+    private LocalDateTime creationTime;
 
+    @Column(name = "access_token", nullable = false)
+    private String accessToken;
+
+    @Column(name = "refresh_token", nullable = false)
+    private String refreshToken;
 
 
     //associations
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "chat_id", nullable = false)
-    private Chat chat;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "admin_id", nullable = true)
-    private Admin admin;
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
