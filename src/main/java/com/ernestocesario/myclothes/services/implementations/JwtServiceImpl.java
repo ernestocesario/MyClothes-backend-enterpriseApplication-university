@@ -1,6 +1,8 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.security.utils.AuthTokenType;
 import com.ernestocesario.myclothes.persistance.entities.User;
+import com.ernestocesario.myclothes.persistance.repositories.UserRepository;
 import com.ernestocesario.myclothes.services.interfaces.JwtService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.DirectDecrypter;
@@ -10,16 +12,25 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.text.ParseException;
 import java.util.Date;
 
+import static com.ernestocesario.myclothes.configurations.security.utils.AuthTokenType.ACCESS_TOKEN;
+import static com.ernestocesario.myclothes.configurations.security.utils.AuthTokenType.REFRESH_TOKEN;
+
 @Service
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
+
+    private final UserRepository userRepository;
+
     @Value("${jwt.secret.signature.key}")
     private String secretKey;
 
@@ -34,13 +45,15 @@ public class JwtServiceImpl implements JwtService {
 
 
     @Override
+    @Transactional
     public String generateAccessToken(User user) throws JOSEException, ParseException {
-        return generateToken(user, accessTokenExpirationTime);
+        return generateToken(user, ACCESS_TOKEN, accessTokenExpirationTime);
     }
 
     @Override
+    @Transactional
     public String generateRefreshToken(User user) throws JOSEException, ParseException {
-        return generateToken(user, refreshTokenExpirationTime);
+        return generateToken(user, REFRESH_TOKEN, refreshTokenExpirationTime);
     }
 
     @Override
@@ -55,23 +68,21 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public boolean validateToken(String token) {
-        try {
-            SignedJWT signedJWT = decryptToken(token);
-            MACVerifier macVerifier = new MACVerifier(secretKey);
+    @Transactional
+    public boolean validateAccessToken(String token) {
+        return validateToken(token, ACCESS_TOKEN);
+    }
 
-            return signedJWT.verify(macVerifier) && !isTokenExpired(signedJWT);
-        }
-        catch (ParseException | JOSEException e) {
-            return false;
-        }
+    @Override
+    @Transactional
+    public boolean validateRefreshToken(String token) {
+        return validateToken(token, REFRESH_TOKEN);
     }
 
 
 
     //private methods
-
-    private String generateToken(User user, long expirationTime) throws JOSEException, ParseException {
+    private String generateToken(User user, AuthTokenType authTokenType, long expirationTime) throws JOSEException, ParseException {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
                 .expirationTime(new Date(System.currentTimeMillis() + expirationTime))
@@ -82,7 +93,37 @@ public class JwtServiceImpl implements JwtService {
 
         signedJWT.sign(new MACSigner(secretKey));
 
+        switch (authTokenType) {
+            case ACCESS_TOKEN -> user.setAccessToken(signedJWT.serialize());
+            case REFRESH_TOKEN -> user.setRefreshToken(signedJWT.serialize());
+        }
+        userRepository.save(user);
+
         return encryptToken(signedJWT);
+    }
+
+    private boolean validateToken(String token, AuthTokenType authTokenType) {
+        try {
+            SignedJWT signedJWT = decryptToken(token);
+            MACVerifier macVerifier = new MACVerifier(secretKey);
+
+            if (!signedJWT.verify(macVerifier) || isTokenExpired(signedJWT))
+                return false;
+
+            String email = signedJWT.getJWTClaimsSet().getSubject();
+            User user = userRepository.findByEmail(email);
+
+            if (user == null)
+                return false;
+
+            return switch (authTokenType) {
+                case ACCESS_TOKEN -> user.getAccessToken().equals(signedJWT.serialize());
+                case REFRESH_TOKEN -> user.getRefreshToken().equals(signedJWT.serialize());
+            };
+        }
+        catch (ParseException | JOSEException e) {
+            return false;
+        }
     }
 
     private String encryptToken(SignedJWT signedJWT) throws ParseException, JOSEException {

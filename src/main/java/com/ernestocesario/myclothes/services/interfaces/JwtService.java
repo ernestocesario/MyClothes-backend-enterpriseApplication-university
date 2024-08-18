@@ -1,5 +1,6 @@
 package com.ernestocesario.myclothes.services.interfaces;
 
+import com.ernestocesario.myclothes.configurations.security.utils.AuthTokenType;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import com.nimbusds.jose.JOSEException;
 
@@ -10,5 +11,6 @@ public interface JwtService {
     public String generateRefreshToken(User user) throws JOSEException, ParseException;
 
     public String getSubject(String token);
-    public boolean validateToken(String token);
+    public boolean validateAccessToken(String token);
+    public boolean validateRefreshToken(String token);
 }

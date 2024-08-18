@@ -38,6 +38,12 @@ public class User {
     @LastModifiedDate
     private LocalDateTime lastModificationDate;
 
+    @Column(name = "access_token")
+    private String accessToken;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     public UserRole getRole() {
         if (this instanceof Customer)
             return UserRole.CUSTOMER;
@@ -46,9 +52,4 @@ public class User {
 
         return null;
     }
-
-
-    //associations
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private AuthToken authToken;
 }
