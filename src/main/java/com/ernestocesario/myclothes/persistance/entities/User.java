@@ -23,12 +23,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = false)
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
     private String email;
+
+    @Column(name = "image_url", nullable = true)
+    private String imageUrl;
 
     @Column(name = "creation_date")
     @CreatedDate
