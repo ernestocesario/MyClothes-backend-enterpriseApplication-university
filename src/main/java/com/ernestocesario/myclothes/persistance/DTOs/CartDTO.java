@@ -3,9 +3,10 @@ package com.ernestocesario.myclothes.persistance.DTOs;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
-public class AuthResponseDTO {
-    private String AccessToken;
-    private String RefreshToken;
+public class CartDTO {
+    List<ProductRequestDTO> products;
 }

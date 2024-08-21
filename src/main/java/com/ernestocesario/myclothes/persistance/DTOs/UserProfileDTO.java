@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AuthResponseDTO {
-    private String AccessToken;
-    private String RefreshToken;
+public class UserProfileDTO {
+    private String id;
+    private String username;
+    private String email;
+    private String imageUrl;
 }

@@ -5,7 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AuthResponseDTO {
-    private String AccessToken;
-    private String RefreshToken;
+public class DiscountCodeDTO {
+    private String code;
+    private int discountPercentage;
+    private boolean used;
 }
