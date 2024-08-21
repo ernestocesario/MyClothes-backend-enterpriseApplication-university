@@ -1,6 +1,5 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
-import com.ernestocesario.myclothes.persistance.entities.utils.OrderProduct;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderStatus;
 import com.ernestocesario.myclothes.persistance.entities.utils.CustomerShippingInfo;
 import jakarta.persistence.*;
@@ -54,7 +53,7 @@ public class Order {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus orderStatus;
 
 
 

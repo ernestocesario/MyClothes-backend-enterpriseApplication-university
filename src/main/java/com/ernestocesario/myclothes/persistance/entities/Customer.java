@@ -21,14 +21,14 @@ public class Customer extends User {
     private boolean banned;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "firstName", column = @Column(nullable = false)),
-            @AttributeOverride(name = "lastName", column = @Column(nullable = false)),
-            @AttributeOverride(name = "phoneNumber", column = @Column(nullable = false)),
-            @AttributeOverride(name = "street", column = @Column(nullable = false)),
-            @AttributeOverride(name = "civicNumber", column = @Column(nullable = false)),
-            @AttributeOverride(name = "city", column = @Column(nullable = false)),
-            @AttributeOverride(name = "state", column = @Column(nullable = false)),
-            @AttributeOverride(name = "zipCode", column = @Column(nullable = false))
+            @AttributeOverride(name = "firstName", column = @Column()),
+            @AttributeOverride(name = "lastName", column = @Column()),
+            @AttributeOverride(name = "phoneNumber", column = @Column()),
+            @AttributeOverride(name = "street", column = @Column()),
+            @AttributeOverride(name = "civicNumber", column = @Column()),
+            @AttributeOverride(name = "city", column = @Column()),
+            @AttributeOverride(name = "state", column = @Column()),
+            @AttributeOverride(name = "zipCode", column = @Column())
     })
     private CustomerShippingInfo shippingInfo;
 
@@ -37,6 +37,10 @@ public class Customer extends User {
     //associations
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DiscountCode> discountCodes = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart cart = new Cart();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Chat> chats = new ArrayList<>();
@@ -49,7 +53,4 @@ public class Customer extends User {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<CartElement> cartElements = new ArrayList<>();
 }

@@ -22,4 +22,6 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("User not found");
         return user;
     }
+
+
 }

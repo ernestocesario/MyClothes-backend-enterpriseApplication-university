@@ -1,7 +1,6 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
 import com.ernestocesario.myclothes.persistance.entities.utils.Gender;
-import com.ernestocesario.myclothes.persistance.entities.utils.OrderProduct;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductSize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
@@ -13,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "product_variants")
+@Table(name = "product_variants", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"gender", "style", "size"})
+})
 @NoArgsConstructor
 @Data
 public class ProductVariant {
@@ -52,8 +53,8 @@ public class ProductVariant {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductPicture> pictures = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderProduct> orderProducts = new ArrayList<>();
+    /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderProduct> orderProducts = new ArrayList<>();*/
 
     @ManyToMany(mappedBy = "productVariants", fetch = FetchType.LAZY)
     private List<Wishlist> wishlists = new ArrayList<>();

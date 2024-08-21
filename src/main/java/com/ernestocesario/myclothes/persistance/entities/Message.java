@@ -21,9 +21,9 @@ public class Message {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "creation_date")
+    @Column(name = "creation_time")
     @CreatedDate
-    private LocalDateTime creationDate;
+    private LocalDateTime creationTime;
 
 
 

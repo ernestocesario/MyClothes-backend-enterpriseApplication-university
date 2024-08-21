@@ -22,7 +22,7 @@ public class WishlistAccess {
 
     //associations
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "whishlist_id", nullable = false)
+    @JoinColumn(name = "wishlist_id", nullable = false)
     private Wishlist wishlist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)

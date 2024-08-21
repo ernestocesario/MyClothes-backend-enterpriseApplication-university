@@ -1,6 +1,5 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
-import com.ernestocesario.myclothes.persistance.entities.utils.OrderProduct;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"brand", "name"})
+})
 @NoArgsConstructor
 @Data
 public class Product {

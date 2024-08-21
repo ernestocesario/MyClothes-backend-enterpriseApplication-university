@@ -1,7 +1,6 @@
-package com.ernestocesario.myclothes.persistance.entities.utils;
+package com.ernestocesario.myclothes.persistance.entities;
 
-import com.ernestocesario.myclothes.persistance.entities.Order;
-import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
+import com.ernestocesario.myclothes.persistance.entities.utils.ProductSnapshot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -39,7 +38,7 @@ public class OrderProduct {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    /*@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "product_variant_id", nullable = false)
-    private ProductVariant productVariant;
+    private ProductVariant productVariant;*/
 }

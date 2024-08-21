@@ -76,9 +76,7 @@ public class AuthServiceImpl implements AuthService {
                 else
                     newUser = registerCustomer(payload);
 
-                AuthResponseDTO authResponseDTO = modelMapper.map(newUser, AuthResponseDTO.class);
-                authResponseDTO.setRegistrationNeeded(true);
-                return authResponseDTO;
+                return modelMapper.map(newUser, AuthResponseDTO.class);
             }
         }
         catch (GeneralSecurityException | IOException | TokenVerifier.VerificationException | RuntimeException e) {

@@ -18,4 +18,17 @@ public class CustomerShippingInfo {
     private String city;
     private String state;
     private String zipCode;
+
+
+    //methods
+    public boolean isComplete() {
+        return firstName != null && !firstName.isEmpty() &&
+                lastName != null && !lastName.isEmpty() &&
+                phoneNumber != null && !phoneNumber.isEmpty() &&
+                street != null && !street.isEmpty() &&
+                civicNumber != null && !civicNumber.isEmpty() &&
+                city != null && !city.isEmpty() &&
+                state != null && !state.isEmpty() &&
+                zipCode != null && !zipCode.isEmpty();
+    }
 }
