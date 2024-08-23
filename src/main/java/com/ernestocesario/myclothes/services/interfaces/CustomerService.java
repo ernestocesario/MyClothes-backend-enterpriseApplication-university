@@ -1,14 +1,27 @@
 package com.ernestocesario.myclothes.services.interfaces;
 
 import com.ernestocesario.myclothes.persistance.DTOs.*;
+import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.utils.CustomerShippingInfo;
 
 import java.util.List;
 
 public interface CustomerService {
 
-    //smistare i metodi nei vari service
+    List<Customer> getListOfAllCustomers();
+    List<Customer> getListOfAllBannedCustomers();
+    Customer getCustomer(String id);
 
+    boolean setCustomerLimitations(Customer customer, boolean isBanned);
+    boolean addBalanceToCustomer(Customer customer, double amount);
+    boolean removeBalanceFromCustomer(Customer customer, double amount);
+    boolean setShippingInfo(Customer customer, CustomerShippingInfo customerShippingInfo);
+    boolean deleteCustomer(Customer customer);
+
+
+
+
+    /*
     public List<DiscountCodeDTO> getDiscountCodeOfCustomer();
     public CustomerProfileDTO getCustomerProfile();
     public List<OrderDTO> getOrderHistory();
@@ -65,4 +78,5 @@ public interface CustomerService {
     public boolean createNewProduct(ProductDTO productDTO);  //only accessible to admins
     public boolean deleteProductVariant(ProductDTO productDTO);  //only accessible to admins
     public boolean deleteProductAndItsVariants(ProductDTO productDTO);  //only accessible to admins
+     */
 }
