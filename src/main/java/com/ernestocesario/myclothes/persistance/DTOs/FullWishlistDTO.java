@@ -11,4 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 public class FullWishlistDTO extends WishlistDTO {
     private List<ProductDTO> products;
+
+    @Override
+    public String toString() {
+        return "FullWishlistDTO{" +
+                "id='" + getId() + '\'' + ", " +
+                "name='" + getName() + '\'' + ", " +
+                "products=" + products + '}';
+    }
 }

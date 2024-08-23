@@ -12,7 +12,7 @@ public class OrderDTO {
     private String id;
     private LocalDateTime orderDate;
     private double subtotalPrice;
-    private double discount;
+    private double discountPrice;
     private double totalPrice;
     private OrderStatus orderStatus;
 }

@@ -35,4 +35,14 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "admin_id", nullable = true)
     private Admin admin;
+
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id='" + id + '\'' +
+                ", content='" + content + '\'' +
+                ", creationTime=" + creationTime +
+                '}';
+    }
 }

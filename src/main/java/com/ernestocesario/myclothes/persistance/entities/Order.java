@@ -34,7 +34,7 @@ public class Order {
 
     @Column(name = "discount_applied", nullable = false)
     @PositiveOrZero
-    private double discount;
+    private double discountPrice;
 
     @Transient
     private double totalPrice;
@@ -69,6 +69,6 @@ public class Order {
     //private methods
     @PostLoad
     private void calculateTotalPrice() {
-        totalPrice = subtotalPrice - discount;
+        totalPrice = subtotalPrice - discountPrice;
     }
 }

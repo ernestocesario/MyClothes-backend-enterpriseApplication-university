@@ -1,5 +1,6 @@
 package com.ernestocesario.myclothes.persistance.entities.utils;
 
+import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,4 +29,19 @@ public class ProductSnapshot {
     private ProductSize size;
 
     private double price;
+
+
+    //methods
+    public static ProductSnapshot fromProductVariant(ProductVariant productVariant) {
+        return new ProductSnapshot(
+                productVariant.getProduct().getBrand(),
+                productVariant.getProduct().getName(),
+                productVariant.getProduct().getDescription(),
+                productVariant.getProduct().getCategory(),
+                productVariant.getGender(),
+                productVariant.getStyle(),
+                productVariant.getSize(),
+                productVariant.getPrice()
+        );
+    }
 }

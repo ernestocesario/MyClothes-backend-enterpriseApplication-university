@@ -22,6 +22,7 @@ public class MyClothesBackendEnterpriseApplicationUniversityApplication {
     public CommandLineRunner test() {
         return (args) -> {
             testService.test1();
+            testService.test2();
         };
     }
 }

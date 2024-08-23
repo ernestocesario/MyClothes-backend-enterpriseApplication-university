@@ -12,4 +12,16 @@ public class CustomerProfileDTO extends UserProfileDTO {
     private double balance;
     private boolean banned;
     private CustomerShippingInfo shippingInfo;
+
+    @Override
+    public String toString() {
+        return "CustomerProfileDTO{" +
+                "id='" + getId() + '\'' + ", " +
+                "username='" + getUsername() + '\'' + ", " +
+                "email='" + getEmail() + '\'' + ", " +
+                "imageUrl='" + getImageUrl() + '\'' + ", " +
+                "balance=" + balance + ", " +
+                "banned=" + banned + ", " +
+                "shippingInfo=" + shippingInfo + '}';
+    }
 }

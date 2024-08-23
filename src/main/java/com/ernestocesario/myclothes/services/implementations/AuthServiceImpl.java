@@ -17,7 +17,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.auth.oauth2.TokenVerifier;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +28,6 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final JwtServiceImpl jwtService;
     private final CustomerRepository customerRepository;
@@ -60,7 +58,8 @@ public class AuthServiceImpl implements AuthService {
                     jwtService.generateAccessToken(user);
                     jwtService.generateRefreshToken(user);
 
-                    return modelMapper.map(user, AuthResponseDTO.class);
+                    //return modelMapper.map(user, AuthResponseDTO.class);
+                    return null;
                 }
                 catch (Exception e) {
                     throw new InternalServerErrorException();
@@ -76,7 +75,8 @@ public class AuthServiceImpl implements AuthService {
                 else
                     newUser = registerCustomer(payload);
 
-                return modelMapper.map(newUser, AuthResponseDTO.class);
+                //return modelMapper.map(newUser, AuthResponseDTO.class);
+                return null;
             }
         }
         catch (GeneralSecurityException | IOException | TokenVerifier.VerificationException | RuntimeException e) {

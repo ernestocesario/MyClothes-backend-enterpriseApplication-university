@@ -11,4 +11,13 @@ public class MessageDTO {
     private String content;
     private LocalDateTime creationTime;
     private boolean fromAdmin;
+
+    @Override
+    public String toString() {
+        return "MessageDTO{" +
+                "content='" + content + '\'' +
+                ", creationTime=" + creationTime +
+                ", fromAdmin=" + fromAdmin +
+                '}';
+    }
 }

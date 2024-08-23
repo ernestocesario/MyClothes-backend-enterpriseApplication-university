@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class CartDTO {
-    List<ProductRequestDTO> products;
+    List<ProductRequestDTO> productRequestDTOList;
 }

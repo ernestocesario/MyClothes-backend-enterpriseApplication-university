@@ -11,4 +11,16 @@ import java.util.List;
 @NoArgsConstructor
 public class FullChatDTO extends ChatDTO {
     private List<MessageDTO> messages;
+
+    @Override
+    public String toString() {
+        return "FullChatDTO{" +
+                "id='" + getId() + '\'' +
+                ", active=" + isActive() +
+                ", creationTime=" + getCreationTime() +
+                ", closingTime=" + getClosingTime() +
+                ", userEmail='" + getUserEmail() + '\'' +
+                ", messages=" + messages +
+                '}';
+    }
 }

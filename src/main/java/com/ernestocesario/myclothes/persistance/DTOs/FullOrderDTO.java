@@ -12,5 +12,18 @@ import java.util.List;
 @NoArgsConstructor
 public class FullOrderDTO extends OrderDTO {
     private CustomerShippingInfo shippingInfo;
-    private List<ProductRequestDTO> products;
+    private List<ProductRequestDTO> productRequestDTOList;
+
+    @Override
+    public String toString() {
+        return "FullOrderDTO{" +
+                "id='" + getId() + '\'' + ", " +
+                "orderDate=" + getOrderDate() + ", " +
+                "subtotalPrice=" + getSubtotalPrice() + ", " +
+                "discountPrice=" + getDiscountPrice() + ", " +
+                "totalPrice=" + getTotalPrice() + ", " +
+                "orderStatus=" + getOrderStatus() + ", " +
+                "shippingInfo=" + shippingInfo + ", " +
+                "productRequestDTOList=" + productRequestDTOList + '}';
+    }
 }
