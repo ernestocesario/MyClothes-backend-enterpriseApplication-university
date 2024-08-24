@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface DiscountCodeMapper {
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "code", source = "code")
     @Mapping(target = "discountPercentage", source = "discountPercentage")
     @Mapping(target = "used", source = "used")

@@ -8,6 +8,7 @@ import java.util.List;
 public interface WishlistService {
     List<Wishlist> getAllPublicWishlists();
     List<Wishlist> getWishlistsOfCustomer(Customer customer);
+    List<Wishlist> getWishlistSharedWith(Customer customer);
     Wishlist getWishlistById(String wishlistId);
 
     boolean createWishlist(Customer customer, String wishlistName);

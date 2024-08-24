@@ -2,11 +2,12 @@ package com.ernestocesario.myclothes.services.interfaces;
 
 import com.ernestocesario.myclothes.persistance.entities.Cart;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface CartService {
-    Cart getCartByCustomer(Customer customer);
+    Cart getMyCart();
 
-    boolean addProductToCart(Customer customer, String productVariantId, int quantity);
-    boolean removeProductFromCart(Customer customer, String productVariantId);
-    boolean updateCart(Customer customer, Cart cart);
+    boolean addProductToCart(String productVariantId, int quantity);
+    boolean removeProductFromCart(String productVariantId);
+    boolean updateProductInCart(String productVariantId, int quantity);
 }

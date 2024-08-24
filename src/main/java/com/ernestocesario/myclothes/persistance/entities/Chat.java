@@ -20,12 +20,15 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "active", nullable = false)
+    @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
     private boolean active;
 
     @Column(name = "creation_time")
     @CreatedDate
     private LocalDateTime creationTime;
+
+    @Column(name = "last_message_time", columnDefinition = "TIMESTAMP DEFAULT '1970-01-01 00:00:00'")
+    private LocalDateTime lastMessageTime;
 
     @Column(name = "closing_time")
     private LocalDateTime closingTime;

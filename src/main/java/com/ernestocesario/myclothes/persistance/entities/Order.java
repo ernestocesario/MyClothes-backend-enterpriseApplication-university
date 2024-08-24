@@ -32,7 +32,7 @@ public class Order {
     @Positive
     private double subtotalPrice;
 
-    @Column(name = "discount_applied", nullable = false)
+    @Column(name = "discount_applied", nullable = false, columnDefinition = "double precision default 0")
     @PositiveOrZero
     private double discountPrice;
 
@@ -66,9 +66,17 @@ public class Order {
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
 
-    //private methods
+    //public methods
+    public void calculateSubtotalPrice() {
+        subtotalPrice = orderProducts.stream().mapToDouble(OrderProduct::getTotalPrice).sum();
+    }
+
+    public void applyDiscount(int discountPercentage) {
+        discountPrice = subtotalPrice * discountPercentage / 100;
+    }
+
     @PostLoad
-    private void calculateTotalPrice() {
+    public void calculateTotalPrice() {
         totalPrice = subtotalPrice - discountPrice;
     }
 }

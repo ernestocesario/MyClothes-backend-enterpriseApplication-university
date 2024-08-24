@@ -41,4 +41,10 @@ public class OrderProduct {
     /*@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "product_variant_id", nullable = false)
     private ProductVariant productVariant;*/
+
+
+    //public methods
+    public double getTotalPrice(){
+        return this.productSnapshot.getPrice() * this.quantity;
+    }
 }

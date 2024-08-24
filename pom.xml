@@ -121,6 +121,13 @@
             <version>1.6.0</version>
         </dependency>
 
+        <!-- Apache Commons Text -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+
     </dependencies>
 
 

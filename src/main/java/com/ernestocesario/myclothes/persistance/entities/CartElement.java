@@ -2,6 +2,7 @@ package com.ernestocesario.myclothes.persistance.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,14 @@ public class CartElement {
     @Positive
     private int quantity;
 
+
+    //Builder
+    @Builder
+    public CartElement(int quantity, ProductVariant productVariant, Cart cart) {
+        this.quantity = quantity;
+        this.productVariant = productVariant;
+        this.cart = cart;
+    }
 
 
     //associations
