@@ -1,5 +1,6 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.mappers.UserMapper;
 import com.ernestocesario.myclothes.configurations.security.utils.AuthTokenType;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import com.ernestocesario.myclothes.persistance.repositories.UserRepository;
@@ -34,8 +35,8 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.secret.signature.key}")
     private String secretKey;
 
-    @Value("${jwt.secret.encryption.key}")
-    private String encryptionKey;
+    //@Value("${jwt.secret.encryption.key}")
+    //private String encryptionKey;
 
     @Value("${jwt.access.token.expiration.time}")
     private long accessTokenExpirationTime;
@@ -46,23 +47,22 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     @Transactional
-    public String generateAccessToken(User user) throws JOSEException, ParseException {
-        return generateToken(user, ACCESS_TOKEN, accessTokenExpirationTime);
+    public void generateAccessToken(User user) throws JOSEException, ParseException {
+        generateToken(user, ACCESS_TOKEN, accessTokenExpirationTime);
     }
 
     @Override
     @Transactional
-    public String generateRefreshToken(User user) throws JOSEException, ParseException {
-        return generateToken(user, REFRESH_TOKEN, refreshTokenExpirationTime);
+    public void generateRefreshToken(User user) throws JOSEException, ParseException {
+        generateToken(user, REFRESH_TOKEN, refreshTokenExpirationTime);
     }
 
     @Override
     public String getSubject(String token) {
         try {
-
-            return decryptToken(token).getJWTClaimsSet().getSubject();
+            return SignedJWT.parse(token).getJWTClaimsSet().getSubject();  //return decryptToken(token).getJWTClaimsSet().getSubject();
         }
-        catch (JOSEException | ParseException e) {
+        catch (ParseException e) {
             return null;
         }
     }
@@ -82,7 +82,7 @@ public class JwtServiceImpl implements JwtService {
 
 
     //private methods
-    private String generateToken(User user, AuthTokenType authTokenType, long expirationTime) throws JOSEException, ParseException {
+    private void generateToken(User user, AuthTokenType authTokenType, long expirationTime) throws JOSEException, ParseException {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
                 .expirationTime(new Date(System.currentTimeMillis() + expirationTime))
@@ -99,12 +99,12 @@ public class JwtServiceImpl implements JwtService {
         }
         userRepository.save(user);
 
-        return encryptToken(signedJWT);
+        //return encryptToken(signedJWT);
     }
 
     private boolean validateToken(String token, AuthTokenType authTokenType) {
         try {
-            SignedJWT signedJWT = decryptToken(token);
+            SignedJWT signedJWT = SignedJWT.parse(token);  //SignedJWT signedJWT = decryptToken(token);
             MACVerifier macVerifier = new MACVerifier(secretKey);
 
             if (!signedJWT.verify(macVerifier) || isTokenExpired(signedJWT))
@@ -126,6 +126,7 @@ public class JwtServiceImpl implements JwtService {
         }
     }
 
+    /*
     private String encryptToken(SignedJWT signedJWT) throws ParseException, JOSEException {
         SecretKey key = new SecretKeySpec(encryptionKey.getBytes(), "AES");
         EncryptedJWT encryptedJWT = new EncryptedJWT(
@@ -146,6 +147,7 @@ public class JwtServiceImpl implements JwtService {
 
         return encryptedJWT.getPayload().toSignedJWT();
     }
+    */
 
     private boolean isTokenExpired(SignedJWT signedJWT) throws ParseException {
         return signedJWT.getJWTClaimsSet().getExpirationTime().before(new Date());

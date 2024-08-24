@@ -1,5 +1,6 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.mappers.UserMapper;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidGoogleIdTokenException;
 import com.ernestocesario.myclothes.persistance.DTOs.AuthResponseDTO;
@@ -34,6 +35,8 @@ public class AuthServiceImpl implements AuthService {
     private final AdminRepository adminRepository;
     private final AllowedAdminRepository allowedAdminRepository;
 
+    private final UserMapper userMapper;
+
 
     @Override
     @Transactional
@@ -58,8 +61,7 @@ public class AuthServiceImpl implements AuthService {
                     jwtService.generateAccessToken(user);
                     jwtService.generateRefreshToken(user);
 
-                    //return modelMapper.map(user, AuthResponseDTO.class);
-                    return null;
+                    return userMapper.toAuthResponseDTO(user);
                 }
                 catch (Exception e) {
                     throw new InternalServerErrorException();
@@ -75,8 +77,7 @@ public class AuthServiceImpl implements AuthService {
                 else
                     newUser = registerCustomer(payload);
 
-                //return modelMapper.map(newUser, AuthResponseDTO.class);
-                return null;
+                return userMapper.toAuthResponseDTO(newUser);
             }
         }
         catch (GeneralSecurityException | IOException | TokenVerifier.VerificationException | RuntimeException e) {
@@ -84,6 +85,9 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+
+
+    //private methods
     private User registerCustomer(GoogleIdToken.Payload payload) {
         Customer customer = new Customer();
 

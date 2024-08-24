@@ -7,8 +7,8 @@ import com.nimbusds.jose.JOSEException;
 import java.text.ParseException;
 
 public interface JwtService {
-    public String generateAccessToken(User user) throws JOSEException, ParseException;
-    public String generateRefreshToken(User user) throws JOSEException, ParseException;
+    public void generateAccessToken(User user) throws JOSEException, ParseException;
+    public void generateRefreshToken(User user) throws JOSEException, ParseException;
 
     public String getSubject(String token);
     public boolean validateAccessToken(String token);
