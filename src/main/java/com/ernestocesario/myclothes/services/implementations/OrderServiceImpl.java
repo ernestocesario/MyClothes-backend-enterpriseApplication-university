@@ -26,7 +26,6 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
     private final UserServiceImpl userServiceImpl;
-    private final DiscountCodeServiceImpl discountCodeServiceImpl;
     private final DiscountCodeRepository discountCodeRepository;
     private final OrderProductRepository orderProductRepository;
 
@@ -67,6 +66,8 @@ public class OrderServiceImpl implements OrderService {
         order.setCustomer(customer);
         order.setShippingInfo(customer.getShippingInfo());
         order.setOrderStatus(OrderStatus.PENDING);
+
+        orderRepository.save(order);
 
         for (CartElement cartElement : cart.getCartElements()) {
             OrderProduct orderProduct = new OrderProduct();

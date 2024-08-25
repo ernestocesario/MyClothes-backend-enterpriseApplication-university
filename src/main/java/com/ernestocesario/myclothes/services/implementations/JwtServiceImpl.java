@@ -1,16 +1,12 @@
 package com.ernestocesario.myclothes.services.implementations;
 
-import com.ernestocesario.myclothes.configurations.mappers.UserMapper;
 import com.ernestocesario.myclothes.configurations.security.utils.AuthTokenType;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import com.ernestocesario.myclothes.persistance.repositories.UserRepository;
 import com.ernestocesario.myclothes.services.interfaces.JwtService;
 import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.DirectDecrypter;
-import com.nimbusds.jose.crypto.DirectEncrypter;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.text.ParseException;
 import java.util.Date;
 

@@ -1,7 +1,7 @@
 package com.ernestocesario.myclothes.configurations;
 
-import com.ernestocesario.myclothes.configurations.mappers.ExceptionMapper;
-import com.ernestocesario.myclothes.persistance.DTOs.ExceptionDTO;
+import com.ernestocesario.myclothes.configurations.mappers.appLogic.ExceptionMapper;
+import com.ernestocesario.myclothes.persistance.DTOs.appLogic.ExceptionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

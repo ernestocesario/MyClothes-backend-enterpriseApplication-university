@@ -28,7 +28,7 @@ public class Order {
     @CreatedDate
     private LocalDateTime orderDate;
 
-    @Column(name = "subtotal_price", nullable = false)
+    @Column(name = "subtotal_price", nullable = false, columnDefinition = "double precision default 0")
     @Positive
     private double subtotalPrice;
 
