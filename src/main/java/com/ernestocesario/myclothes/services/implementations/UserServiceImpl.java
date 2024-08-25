@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email);
 
         if(user == null)
-            throw new EntityNotFoundException("User not found");
+            throw new EntityNotFoundException();
         return user;
     }
 

@@ -15,4 +15,16 @@ public enum ReviewStars {
     ReviewStars(int value) {
         this.value = value;
     }
+
+
+
+    //public methods
+    public static ReviewStars fromValue(int value) {
+        for (ReviewStars reviewStars : ReviewStars.values()) {
+            if (reviewStars.value == value) {
+                return reviewStars;
+            }
+        }
+        return null;
+    }
 }

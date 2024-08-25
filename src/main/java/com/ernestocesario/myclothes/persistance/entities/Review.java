@@ -1,6 +1,7 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
 import com.ernestocesario.myclothes.persistance.entities.utils.ReviewStars;
+import com.ernestocesario.myclothes.persistance.entities.utils.ReviewStarsConverter;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class Review {
     private String content;
 
     @Column(name = "stars", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = ReviewStarsConverter.class)
     private ReviewStars stars;
 
 

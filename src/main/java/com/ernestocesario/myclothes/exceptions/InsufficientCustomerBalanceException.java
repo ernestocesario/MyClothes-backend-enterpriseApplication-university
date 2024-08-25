@@ -1,7 +1,4 @@
 package com.ernestocesario.myclothes.exceptions;
 
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-public class InsufficientCustomerBalanceException extends RuntimeException {
+public class InsufficientCustomerBalanceException extends ApplicationException {
 }

@@ -3,19 +3,23 @@ package com.ernestocesario.myclothes.services.interfaces;
 import com.ernestocesario.myclothes.persistance.entities.Product;
 import com.ernestocesario.myclothes.persistance.entities.ProductPicture;
 import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
+import com.ernestocesario.myclothes.persistance.entities.utils.ProductCategory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getAllProducts();
-    List<ProductVariant> getAllProductVariantsOfAProduct(String productId);
-    List<Product> getProductsByKeyword(String keyword);
+    Page<Product> getAllProducts(Pageable pageable);
+    Page<Product> getProductsByKeyword(String keyword, Pageable pageable);
+    Page<Product> getProductsByCategory(ProductCategory productCategory, Pageable pageable);
     Product getProductById(String productId);
     ProductVariant getProductVariantById(String productVariantId);
-    ProductPicture getProductVariantPicture(String productVariantId);
+    List<ProductPicture> getProductVariantPictures(String productVariantId);
 
-    boolean addNewProduct(ProductVariant productVariant);
-    boolean deleteProductVariant(String productVariantId);
-    boolean deleteProductAndItsVariants(String productId);
-    boolean updateProductVariant(ProductVariant productVariant);
+    boolean addNewProduct(ProductVariant productVariant);  //only admin
+    boolean deleteProductVariant(String productVariantId);  //only admin
+    boolean deleteProductAndItsVariants(String productId);  //only admin
+    boolean updateProductOnly(Product product);  //only admin
+    boolean updateProductVariant(ProductVariant productVariant);  //only admin
 }
