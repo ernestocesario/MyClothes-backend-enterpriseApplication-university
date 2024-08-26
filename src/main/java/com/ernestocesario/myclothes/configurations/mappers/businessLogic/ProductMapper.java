@@ -1,10 +1,7 @@
 package com.ernestocesario.myclothes.configurations.mappers.businessLogic;
 
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.*;
-import com.ernestocesario.myclothes.persistance.entities.CartElement;
-import com.ernestocesario.myclothes.persistance.entities.OrderProduct;
-import com.ernestocesario.myclothes.persistance.entities.Product;
-import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
+import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductSnapshot;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -71,6 +68,11 @@ public interface ProductMapper {
     @Mapping(target = "size", source = "size")
     @Mapping(target = "price", source = "price")
     FullProductVariantDTO toFullProductVariantDTO(ProductSnapshot productSnapshot);
+
+    @Named("toFullProductVariantDTOFromWishlistProduct")
+    default FullProductVariantDTO toFullProductVariantDTO(WishlistProduct wishlistProduct) {
+        return toFullProductVariantDTO(wishlistProduct.getProductVariant());
+    }
 
     @Named("toProductRequestDTOFromCartElement")
     @Mapping(target = "quantity", source = "quantity")

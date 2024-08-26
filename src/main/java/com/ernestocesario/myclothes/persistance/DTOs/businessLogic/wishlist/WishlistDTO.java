@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class WishlistDTO {
     private String id;
     private String name;
+    private boolean pub;
 }

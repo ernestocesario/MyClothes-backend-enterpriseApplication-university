@@ -5,9 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class WishlistSharingDTO {
+public class WishlistShareDTO {
     private String id;
+    private String wishlistId;
     private String userEmail;
-
-    //this object should be created only for customer that has access to a wishlist (i.e. WishlistPermission.SHARED)
 }

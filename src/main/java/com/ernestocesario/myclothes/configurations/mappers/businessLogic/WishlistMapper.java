@@ -3,11 +3,11 @@ package com.ernestocesario.myclothes.configurations.mappers.businessLogic;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.wishlist.FullWishlistDTO;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.FullProductVariantDTO;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.wishlist.WishlistDTO;
-import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.wishlist.WishlistSharingDTO;
+import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.wishlist.WishlistShareDTO;
 import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
 import com.ernestocesario.myclothes.persistance.entities.Wishlist;
-import com.ernestocesario.myclothes.persistance.entities.WishlistAccess;
-import com.ernestocesario.myclothes.persistance.entities.utils.WishlistPermission;
+import com.ernestocesario.myclothes.persistance.entities.WishlistProduct;
+import com.ernestocesario.myclothes.persistance.entities.WishlistShare;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,6 +24,7 @@ public interface WishlistMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "pub", source = "pub")
     WishlistDTO toWishlistDTO(Wishlist wishlist);
 
     default FullWishlistDTO toFullWishlistDTO(Wishlist wishlist) {
@@ -31,26 +32,23 @@ public interface WishlistMapper {
         WishlistDTO wishlistDTO = toWishlistDTO(wishlist);
         BeanUtils.copyProperties(wishlistDTO, fullWishlistDTO);
 
-        fullWishlistDTO.setProducts(toProductDTOList(wishlist.getProductVariants()));
+        fullWishlistDTO.setProducts(toFullProductVariantDTOListFromWishlistProductList(wishlist.getWishlistProducts()));
 
         return fullWishlistDTO;
     }
 
-    default WishlistSharingDTO toWishlistSharingDTO(WishlistAccess wishlistAccess) {
-        WishlistPermission wishlistPermission = wishlistAccess.getWishlistPermission();
-        if (wishlistPermission != WishlistPermission.SHARED)
-            return null;
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "wishlistId", source = "wishlist.id")
+    @Mapping(target = "userEmail", source = "customer.email")
+    WishlistShareDTO toWishlistSharesDTO(WishlistShare wishlistShare);
 
-        WishlistSharingDTO wishlistSharingDTO = new WishlistSharingDTO();
-        wishlistSharingDTO.setId(wishlistAccess.getId());
-        wishlistSharingDTO.setUserEmail(wishlistAccess.getCustomer().getEmail());
-
-        return wishlistSharingDTO;
-    }
 
 
     //Utility methods
-    @Named("toProductDTOList")
+    @Named("toFullProductVariantDTOListFromProductVariantList")
     @IterableMapping(qualifiedByName = "toFullProductVariantDTOFromProductVariant")
-    List<FullProductVariantDTO> toProductDTOList(List<ProductVariant> productVariants);
+    List<FullProductVariantDTO> toFullProductVariantDTOListFromProductVariantList(List<ProductVariant> productVariants);
+
+    @IterableMapping(qualifiedByName = "toFullProductVariantDTOFromWishlistProduct")
+    List<FullProductVariantDTO> toFullProductVariantDTOListFromWishlistProductList(List<WishlistProduct> wishlistProducts);
 }

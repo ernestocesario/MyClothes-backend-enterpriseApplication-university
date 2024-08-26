@@ -56,8 +56,8 @@ public class ProductVariant {
     /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderProduct> orderProducts = new ArrayList<>();*/
 
-    @ManyToMany(mappedBy = "productVariants", fetch = FetchType.LAZY)
-    private List<Wishlist> wishlists = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WishlistProduct> wishlistProducts = new ArrayList<>();
 
     /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();*/

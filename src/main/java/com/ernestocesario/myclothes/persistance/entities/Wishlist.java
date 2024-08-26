@@ -1,7 +1,6 @@
 package com.ernestocesario.myclothes.persistance.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,18 +19,18 @@ public class Wishlist {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "pub", nullable = false)
+    private boolean pub;
 
 
     //associations
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
-    @NotEmpty
-    private List<WishlistAccess> wishlistAccesses = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "wishlist_products",
-            joinColumns = @JoinColumn(name = "wishlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_variant_id")
-    )
-    private List<ProductVariant> productVariants = new ArrayList<>();
+    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<WishlistShare> wishlistShares = new ArrayList<>();
+
+    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<WishlistProduct> wishlistProducts = new ArrayList<>();
 }

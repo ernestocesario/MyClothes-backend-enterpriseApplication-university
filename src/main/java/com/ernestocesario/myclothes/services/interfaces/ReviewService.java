@@ -9,6 +9,7 @@ import java.util.List;
 public interface ReviewService {
     Page<Review> getAllReviewsOfProduct(String productId, Pageable pageable);
     Page<Review> getAllReviewsOfCustomer(String customerId, Pageable pageable);
+    Page<Review> getAllReviewsByKeyword(String keyword, Pageable pageable);  //only admin
     Review getReviewById(String reviewId);
 
     boolean addReviewToProduct(String productId, Review review);  //only customer

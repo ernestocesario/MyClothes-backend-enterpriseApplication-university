@@ -2,20 +2,24 @@ package com.ernestocesario.myclothes.services.interfaces;
 
 import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.Wishlist;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface WishlistService {
-    List<Wishlist> getAllPublicWishlists();
-    List<Wishlist> getWishlistsOfCustomer(Customer customer);
-    List<Wishlist> getWishlistSharedWith(Customer customer);
+    Page<Wishlist> getAllPublicWishlists(Pageable pageable);
+    Page<Wishlist> getAllPublicWishlistsByKeyword(String keyword, Pageable pageable);
+    Page<Wishlist> getMyWishlists(Pageable pageable);  //only admin
+    Page<Wishlist> getWishlistSharedWithMe(Pageable pageable);  //only customers
+    Page<Wishlist> getWishlistsOfCustomer(String customerId, Pageable pageable);  //only admin
     Wishlist getWishlistById(String wishlistId);
 
-    boolean createWishlist(Customer customer, String wishlistName);
-    boolean deleteWishlist(Customer customer, String wishlistId);
-    boolean modifyWishlistVisibility(Customer customer, String wishlistId, boolean isPublic);
-    boolean shareWishlist(Customer customer, String wishlistId, Customer recipientCustomer);
-    boolean unshareWishlist(Customer customer, String wishlistId, Customer recipientCustomer);
-    boolean addProductVariantToWishlist(Customer customer, String wishlistId, String productVariantId);
-    boolean removeProductVariantFromWishlist(Customer customer, String wishlistId, String productVariantId);
+    boolean createWishlist(String wishlistName);  //only customer
+    boolean deleteWishlist(String wishlistId);
+    boolean modifyWishlistVisibility(String wishlistId, boolean isPublic);  //only customer
+    boolean shareWishlist(String wishlistId, String recipientCustomerEmail);  //only customer
+    boolean unshareWishlist(String wishlistId, Customer recipientCustomer);  //only customer
+    boolean addProductVariantToWishlist(String wishlistId, String productVariantId);  //only customer
+    boolean removeProductVariantFromWishlist(String wishlistId, String productVariantId);  //only customer
 }

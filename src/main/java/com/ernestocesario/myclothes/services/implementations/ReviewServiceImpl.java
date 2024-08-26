@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserServiceImpl userServiceImpl;
 
     @Override
+    @Transactional
     public Page<Review> getAllReviewsOfProduct(String productId, Pageable pageable) {
         Product product = productRepository.findById(productId).orElseThrow(InternalServerErrorException::new);
 
@@ -35,6 +37,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Page<Review> getAllReviewsOfCustomer(String customerId, Pageable pageable) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(InternalServerErrorException::new);
 
@@ -45,11 +48,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
+    public Page<Review> getAllReviewsByKeyword(String keyword, Pageable pageable) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "stars");
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        return reviewRepository.findAllByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(keyword, keyword, pageable);
+    }
+
+    @Override
+    @Transactional
     public Review getReviewById(String reviewId) {
         return reviewRepository.findById(reviewId).orElseThrow(InternalServerErrorException::new);
     }
 
     @Override
+    @Transactional
     public boolean addReviewToProduct(String productId, Review review) {
         User user = userServiceImpl.getCurrentUser();
         if (!user.isCustomer())
@@ -68,6 +82,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public boolean removeReviewFromProduct(String reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(InternalServerErrorException::new);
         reviewRepository.delete(review);
