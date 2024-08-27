@@ -1,7 +1,7 @@
 package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
 import com.ernestocesario.myclothes.persistance.entities.Cart;
 import com.ernestocesario.myclothes.persistance.entities.CartElement;
 import com.ernestocesario.myclothes.persistance.entities.Customer;

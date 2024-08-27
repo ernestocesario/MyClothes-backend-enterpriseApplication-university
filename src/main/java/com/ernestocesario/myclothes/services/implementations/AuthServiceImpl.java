@@ -2,7 +2,7 @@ package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.mappers.businessLogic.UserMapper;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
-import com.ernestocesario.myclothes.exceptions.InvalidGoogleIdTokenException;
+import com.ernestocesario.myclothes.exceptions.auth.InvalidGoogleIdTokenException;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.users.AuthResponseDTO;
 import com.ernestocesario.myclothes.persistance.entities.Admin;
 import com.ernestocesario.myclothes.persistance.entities.Customer;

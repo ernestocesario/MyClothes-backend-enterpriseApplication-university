@@ -1,7 +1,7 @@
 package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
 import com.ernestocesario.myclothes.persistance.entities.Admin;
 import com.ernestocesario.myclothes.persistance.repositories.AdminRepository;
 import com.ernestocesario.myclothes.services.interfaces.AdminService;

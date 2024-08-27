@@ -1,9 +1,9 @@
 package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
-import com.ernestocesario.myclothes.exceptions.ProductAlreadyExistsException;
+import com.ernestocesario.myclothes.exceptions.product.ProductAlreadyExistsException;
 import com.ernestocesario.myclothes.persistance.entities.Product;
 import com.ernestocesario.myclothes.persistance.entities.ProductPicture;
 import com.ernestocesario.myclothes.persistance.entities.ProductVariant;

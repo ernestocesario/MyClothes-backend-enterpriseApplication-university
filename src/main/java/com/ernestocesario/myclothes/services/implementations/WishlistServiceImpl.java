@@ -1,7 +1,11 @@
 package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.*;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlist;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrCustomerHasAccessWishlist;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrCustomerHasAccessWishlistOrIsAdminAndWishlistPublic;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrIsAdminAndWishlistPublic;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
 import com.ernestocesario.myclothes.persistance.entities.*;

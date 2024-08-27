@@ -36,7 +36,6 @@ public class Product {
 
     //associations
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @NotEmpty
     private List<ProductVariant> productVariants = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

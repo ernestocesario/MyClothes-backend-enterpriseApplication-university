@@ -1,10 +1,10 @@
 package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnCustomerOrIsAdmin;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnReviewOrIsAdmin;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.customer.CustomerOwnCustomerOrIsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.review.CustomerOwnReviewOrIsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.Product;

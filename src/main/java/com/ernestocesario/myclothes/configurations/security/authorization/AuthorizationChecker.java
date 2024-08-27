@@ -1,6 +1,6 @@
 package com.ernestocesario.myclothes.configurations.security.authorization;
 
-import com.ernestocesario.myclothes.exceptions.InvalidAuthorizationException;
+import com.ernestocesario.myclothes.exceptions.auth.InvalidAuthorizationException;
 import com.ernestocesario.myclothes.persistance.entities.User;
 
 public class AuthorizationChecker {

@@ -1,17 +1,18 @@
-package com.ernestocesario.myclothes.configurations.security.authorization.predicates;
+package com.ernestocesario.myclothes.configurations.security.authorization.predicates.order;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationTest;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.User;
-import com.ernestocesario.myclothes.persistance.repositories.ChatRepository;
+import com.ernestocesario.myclothes.persistance.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerOwnChatOrIsAdmin extends AuthorizationTest {
-    private final ChatRepository chatRepository;
+public class CustomerOwnOrderOrIsAdmin extends AuthorizationTest {
     private final IsAdmin isAdmin;
+    private final OrderRepository orderRepository;
 
     @Override
     protected boolean argumentCheck(Object... objects) {
@@ -20,12 +21,12 @@ public class CustomerOwnChatOrIsAdmin extends AuthorizationTest {
 
     @Override
     protected boolean contextCheck(User user, Object... objects) {
+        String orderId = (String) objects[0];
+
         if (isAdmin.test(user))
             return true;
-
         Customer customer = (Customer) user;
-        String chatId = (String) objects[0];
 
-        return chatRepository.existsChatByIdAndCustomer(chatId, customer);
+        return orderRepository.existsOrderByIdAndCustomer(orderId, customer);
     }
 }

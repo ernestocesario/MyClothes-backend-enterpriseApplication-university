@@ -1,12 +1,12 @@
 package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnCustomerOrIsAdmin;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnOrderOrIsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.customer.CustomerOwnCustomerOrIsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.order.CustomerOwnOrderOrIsAdmin;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
-import com.ernestocesario.myclothes.exceptions.InvalidDiscountCodeException;
-import com.ernestocesario.myclothes.exceptions.OrderCannotBeCancelledException;
+import com.ernestocesario.myclothes.exceptions.discountCode.InvalidDiscountCodeException;
+import com.ernestocesario.myclothes.exceptions.order.OrderCannotBeCancelledException;
 import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderStatus;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductSnapshot;

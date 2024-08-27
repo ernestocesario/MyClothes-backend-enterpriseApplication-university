@@ -1,25 +1,25 @@
-package com.ernestocesario.myclothes.configurations.security.authorization.predicates;
+package com.ernestocesario.myclothes.configurations.security.authorization.predicates.customer;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationTest;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
 import com.ernestocesario.myclothes.persistance.entities.User;
-import com.ernestocesario.myclothes.persistance.entities.Wishlist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class IsAdminAndWishlistPublic extends AuthorizationTest {
+public class CustomerOwnCustomerOrIsAdmin extends AuthorizationTest {
     private final IsAdmin isAdmin;
 
     @Override
     protected boolean argumentCheck(Object... objects) {
-        return objects.length == 1 && objects[0] instanceof Wishlist;
+        return objects.length == 1 && objects[0] instanceof String;
     }
 
     @Override
     protected boolean contextCheck(User user, Object... objects) {
-        Wishlist wishlist = (Wishlist) objects[0];
+        String customerId = (String) objects[0];
 
-        return isAdmin.test(user) && wishlist.isPub();
+        return isAdmin.test(user) || user.getId().equals(customerId);
     }
 }

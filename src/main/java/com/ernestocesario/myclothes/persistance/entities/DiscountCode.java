@@ -18,7 +18,6 @@ public class DiscountCode {
     private String code;
 
     @Column(name = "discount_percentage", nullable = false)
-    @Size(min = 1, max = 100)
     private int discountPercentage;
 
     @Column(name = "used", nullable = false, columnDefinition = "boolean default false")

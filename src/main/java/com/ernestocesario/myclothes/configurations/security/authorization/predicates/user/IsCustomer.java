@@ -1,4 +1,4 @@
-package com.ernestocesario.myclothes.configurations.security.authorization.predicates;
+package com.ernestocesario.myclothes.configurations.security.authorization.predicates.user;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationTest;
 import com.ernestocesario.myclothes.persistance.entities.User;

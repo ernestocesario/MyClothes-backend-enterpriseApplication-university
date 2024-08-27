@@ -1,6 +1,6 @@
 package com.ernestocesario.myclothes.controllers;
 
-import com.ernestocesario.myclothes.exceptions.InvalidGoogleIdTokenException;
+import com.ernestocesario.myclothes.exceptions.auth.InvalidGoogleIdTokenException;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.users.AuthResponseDTO;
 import com.ernestocesario.myclothes.services.implementations.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;

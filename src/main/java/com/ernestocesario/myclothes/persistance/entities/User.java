@@ -28,18 +28,15 @@ public class User {
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email
     private String email;
 
     @Column(name = "image_url", nullable = true)
     private String imageUrl;
 
     @Column(name = "creation_date")
-    @CreatedDate
     private LocalDateTime creationDate;
 
     @Column(name = "last_modification_date")
-    @LastModifiedDate
     private LocalDateTime lastModificationDate;
 
     @Column(name = "access_token")

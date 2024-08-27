@@ -36,11 +36,9 @@ public class ProductVariant {
     private ProductSize size;
 
     @Column(name = "stock", nullable = false)
-    @PositiveOrZero
     private int stock;
 
     @Column(name = "price", nullable = false)
-    @Positive
     private double price;
 
 

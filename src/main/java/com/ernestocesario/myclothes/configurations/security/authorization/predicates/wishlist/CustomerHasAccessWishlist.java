@@ -1,6 +1,7 @@
-package com.ernestocesario.myclothes.configurations.security.authorization.predicates;
+package com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationTest;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import com.ernestocesario.myclothes.persistance.entities.Wishlist;

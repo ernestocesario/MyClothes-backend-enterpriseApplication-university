@@ -1,10 +1,10 @@
 package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnChatOrIsAdmin;
-import com.ernestocesario.myclothes.exceptions.ActiveChatAlreadyExistsForCustomerException;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.chat.CustomerOwnChatOrIsAdmin;
+import com.ernestocesario.myclothes.exceptions.chat.ActiveChatAlreadyExistsForCustomerException;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.repositories.ChatRepository;
