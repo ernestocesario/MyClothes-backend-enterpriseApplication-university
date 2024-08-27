@@ -1,7 +1,12 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnCustomerOrIsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnOrderOrIsAdmin;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidDiscountCodeException;
+import com.ernestocesario.myclothes.exceptions.OrderCannotBeCancelledException;
 import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderStatus;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductSnapshot;
@@ -28,10 +33,15 @@ public class OrderServiceImpl implements OrderService {
     private final UserServiceImpl userServiceImpl;
     private final DiscountCodeRepository discountCodeRepository;
     private final OrderProductRepository orderProductRepository;
+    private final CustomerOwnCustomerOrIsAdmin customerOwnCustomerOrIsAdmin;
+    private final CustomerOwnOrderOrIsAdmin customerOwnOrderOrIsAdmin;
+    private final IsCustomer isCustomer;
 
     @Override
     @Transactional
     public Page<Order> getAllOrdersOfCustomer(String customerId, Pageable pageable) {
+        AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
+
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null)
             throw new InternalServerErrorException();
@@ -45,6 +55,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order getOrderById(String orderId) {
+        AuthorizationChecker.check(customerOwnOrderOrIsAdmin, userServiceImpl.getCurrentUser(), orderId);
+
         Order order = orderRepository.findById(orderId).orElse(null);
         if (order == null)
             throw new InternalServerErrorException();
@@ -55,11 +67,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public boolean placeOrderFromCart(String discountCode) {
-        User user = userServiceImpl.getCurrentUser();
-        if (!user.isCustomer())
-            throw new InternalServerErrorException();
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
-        Customer customer = (Customer) user;
+        Customer customer = (Customer) userServiceImpl.getCurrentUser();
         Cart cart = customer.getCart();
 
         Order order = new Order();
@@ -101,12 +111,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public boolean cancelOrder(String orderId) {
+        AuthorizationChecker.check(customerOwnOrderOrIsAdmin, userServiceImpl.getCurrentUser(), orderId);
+
         Order order = orderRepository.findById(orderId).orElse(null);
         if (order == null)
             throw new InternalServerErrorException();
 
         if (order.getOrderStatus() != OrderStatus.PENDING)
-            return false;
+            throw new OrderCannotBeCancelledException();
 
         orderRepository.delete(order);
 

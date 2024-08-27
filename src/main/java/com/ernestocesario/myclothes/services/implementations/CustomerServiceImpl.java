@@ -1,5 +1,9 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnCustomerOrIsAdmin;
 import com.ernestocesario.myclothes.exceptions.InsufficientCustomerBalanceException;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidCustomerShippingInfoException;
@@ -25,10 +29,15 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final UserServiceImpl userServiceImpl;
     private final CustomerShippingInfoServiceImpl customerShippingInfoServiceImpl;
+    private final IsAdmin isAdmin;
+    private final CustomerOwnCustomerOrIsAdmin customerOwnCustomerOrIsAdmin;
+    private final IsCustomer isCustomer;
 
     @Override
     @Transactional
-    public Page<Customer> getListOfAllCustomers(Pageable pageable) {  //only admin
+    public Page<Customer> getListOfAllCustomers(Pageable pageable) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Sort sort = Sort.by(Sort.Direction.ASC, "username");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
@@ -38,6 +47,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public Page<Customer> getListOfCustomersByKeyword(String keyword, Pageable pageable) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Sort sort = Sort.by(Sort.Direction.ASC, "username");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
@@ -46,7 +57,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Page<Customer> getListOfAllBannedCustomers(Pageable pageable) {  //only admin
+    public Page<Customer> getListOfAllBannedCustomers(Pageable pageable) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Sort sort = Sort.by(Sort.Direction.ASC, "username");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
@@ -55,13 +68,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Customer getCustomer(String id) {
-        return null;
+    public Customer getCustomer(String customerId) {
+        AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
+
+        return customerRepository.findById(customerId).orElseThrow(InternalServerErrorException::new);
     }
 
     @Override
     @Transactional
     public boolean setCustomerLimitations(String customerId, boolean isBanned) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null)
             throw new InternalServerErrorException();
@@ -75,6 +92,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public boolean addBalanceToCustomer(String customerId, double amount) {
+        AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
+
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null)
             throw new InternalServerErrorException();
@@ -88,6 +107,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public boolean removeBalanceFromCustomer(String customerId, double amount) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null)
             throw new InternalServerErrorException();
@@ -101,11 +122,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public boolean setShippingInfo(CustomerShippingInfo customerShippingInfo) {
-        User user = userServiceImpl.getCurrentUser();
-        if (!user.isCustomer())
-            throw new InternalServerErrorException();
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
-        Customer customer = (Customer) user;
+        Customer customer = (Customer) userServiceImpl.getCurrentUser();
 
         if (!customerShippingInfoServiceImpl.validateShippingInfo(customerShippingInfo))
             throw new InvalidCustomerShippingInfoException();
@@ -119,6 +138,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public boolean deleteCustomer() {
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
+
         User user = userServiceImpl.getCurrentUser();
         if (!user.isCustomer())
             throw new InternalServerErrorException();

@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface AdminService {
-    Page<Admin> getListOfAllAdmins(Pageable pageable);
+    Page<Admin> getListOfAllAdmins(Pageable pageable);  //only admins
 }

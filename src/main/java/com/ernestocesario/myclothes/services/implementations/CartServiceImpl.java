@@ -1,5 +1,7 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
 import com.ernestocesario.myclothes.persistance.entities.Cart;
 import com.ernestocesario.myclothes.persistance.entities.CartElement;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
@@ -22,9 +24,13 @@ public class CartServiceImpl implements CartService {
     private final ProductVariantRepository productVariantRepository;
     private final CartElementRepository cartElementRepository;
     private final UserServiceImpl userServiceImpl;
+    private final IsCustomer isCustomer;
 
+    @Override
     @Transactional
     public Cart getMyCart() {
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
+
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
         return customer.getCart();
     }
@@ -32,6 +38,8 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public boolean addProductToCart(String productVariantId, int quantity) {
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
+
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
 
         ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElse(null);
@@ -51,8 +59,9 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public boolean removeProductFromCart(String productVariantId) {
-        Customer customer = (Customer) userServiceImpl.getCurrentUser();
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
+        Customer customer = (Customer) userServiceImpl.getCurrentUser();
         boolean productRemoved = false;
 
         Cart cart = customer.getCart();
@@ -73,8 +82,9 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public boolean updateProductInCart(String productVariantId, int quantity) {
-        Customer customer = (Customer) userServiceImpl.getCurrentUser();
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
+        Customer customer = (Customer) userServiceImpl.getCurrentUser();
         boolean productUpdated = false;
 
         Cart cart = customer.getCart();

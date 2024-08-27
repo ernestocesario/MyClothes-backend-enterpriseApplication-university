@@ -11,4 +11,5 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
     Page<Review> findAllByProduct(Product product, Pageable pageable);
     Page<Review> findAllByCustomer(Customer customer, Pageable pageable);
     Page<Review> findAllByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(String keyword1, String keyword2, Pageable pageable);
+    boolean existsReviewsByIdAndCustomer(String reviewId, Customer customer);
 }

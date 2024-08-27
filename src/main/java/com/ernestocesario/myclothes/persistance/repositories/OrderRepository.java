@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, String> {
     Page<Order> findAllByCustomer(Customer customer, Pageable pageable);
+    boolean existsOrderByIdAndCustomer(String orderId, Customer customer);
 }

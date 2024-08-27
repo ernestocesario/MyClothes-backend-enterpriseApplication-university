@@ -1,5 +1,9 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.CustomerOwnChatOrIsAdmin;
 import com.ernestocesario.myclothes.exceptions.ActiveChatAlreadyExistsForCustomerException;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.persistance.entities.*;
@@ -22,10 +26,15 @@ public class ChatServiceImpl implements ChatService {
     private final UserServiceImpl userServiceImpl;
     private final CustomerServiceImpl customerServiceImpl;
     private final MessageRepository messageRepository;
+    private final CustomerOwnChatOrIsAdmin customerOwnChatOrIsAdmin;
+    private final IsAdmin isAdmin;
+    private final IsCustomer isCustomer;
 
     @Override
     @Transactional
     public Page<Chat> getAllChatsOfCustomer(String customerId, Pageable pageable) {  //only admin
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Sort sort = Sort.by(Sort.Direction.DESC, "creationTime");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
@@ -35,6 +44,8 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public Page<Chat> getAllActiveChats(Pageable pageable) {  //only admin
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Sort sort = Sort.by(Sort.Direction.ASC, "lastMessageTime");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
@@ -44,12 +55,18 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public Chat getChatById(String chatId) {
+        if (!chatRepository.existsById(chatId))
+            throw new InternalServerErrorException();
+        AuthorizationChecker.check(customerOwnChatOrIsAdmin, userServiceImpl.getCurrentUser(), chatId);
+
         return chatRepository.findById(chatId).orElse(null);
     }
 
     @Override
     @Transactional
     public boolean startChat() {  //only customers
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
+
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
 
         if (customerServiceImpl.hasActiveChat(customer))
@@ -68,6 +85,7 @@ public class ChatServiceImpl implements ChatService {
         Chat chat = chatRepository.findById(chatId).orElse(null);
         if (chat == null)
             throw new InternalServerErrorException();
+        AuthorizationChecker.check(customerOwnChatOrIsAdmin, userServiceImpl.getCurrentUser(), chatId);
 
         chat.setActive(false);
         chatRepository.save(chat);
@@ -78,6 +96,8 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public boolean sendMessage(String chatId, String messageContent) {
+        AuthorizationChecker.check(customerOwnChatOrIsAdmin, userServiceImpl.getCurrentUser(), chatId);
+
         User currentUser = userServiceImpl.getCurrentUser();
         boolean fromCustomer = currentUser.isCustomer();
 

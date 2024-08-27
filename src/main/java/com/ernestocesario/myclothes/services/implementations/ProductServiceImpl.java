@@ -1,5 +1,7 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.ProductAlreadyExistsException;
 import com.ernestocesario.myclothes.persistance.entities.Product;
@@ -25,6 +27,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductVariantRepository productVariantRepository;
+    private final IsAdmin isAdmin;
+    private final UserServiceImpl userServiceImpl;
 
     @Override
     @Transactional
@@ -75,6 +79,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public boolean addNewProduct(ProductVariant productVariant) {  //here the Ids of the product and the productVariant are not set
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         boolean somethingChanged = false;
         Product product = productVariant.getProduct();
 
@@ -97,6 +103,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public boolean deleteProductVariant(String productVariantId) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElseThrow(InternalServerErrorException::new);
         productVariantRepository.delete(productVariant);
 
@@ -106,6 +114,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public boolean deleteProductAndItsVariants(String productId) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         Product product = productRepository.findById(productId).orElseThrow(InternalServerErrorException::new);
         List<ProductVariant> productVariants = product.getProductVariants();
 
@@ -118,6 +128,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public boolean updateProductOnly(Product product) {  //here only the properties of Product are set. Not its variants.
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         //check if the product exists. If not throw an exception.
         if (productRepository.existsById(product.getId()))
             throw new InternalServerErrorException();
@@ -130,6 +142,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public boolean updateProductVariant(ProductVariant productVariant) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         //check if the productVariant exists. If not throw an exception.
         if (productVariantRepository.existsById(productVariant.getId()))
             throw new InternalServerErrorException();

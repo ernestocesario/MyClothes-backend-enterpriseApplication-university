@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class CustomerShippingInfoServiceImpl implements CustomerShippingInfoService {
     @Override
-    public boolean validateShippingInfo(CustomerShippingInfo customerShippingInfo) {
+    public boolean validateShippingInfo(CustomerShippingInfo customerShippingInfo) {  //only system
         return
                 StringUtils.hasLength(customerShippingInfo.getFirstName()) &&
                 StringUtils.hasLength(customerShippingInfo.getLastName()) &&

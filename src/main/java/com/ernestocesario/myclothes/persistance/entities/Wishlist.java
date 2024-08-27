@@ -19,7 +19,7 @@ public class Wishlist {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "pub", nullable = false)
+    @Column(name = "pub", nullable = false, columnDefinition = "boolean default false")
     private boolean pub;
 
 

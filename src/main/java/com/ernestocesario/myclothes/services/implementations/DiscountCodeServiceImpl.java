@@ -1,10 +1,12 @@
 package com.ernestocesario.myclothes.services.implementations;
 
+import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsAdmin;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.IsCustomer;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.DiscountCode;
-import com.ernestocesario.myclothes.persistance.entities.User;
 import com.ernestocesario.myclothes.persistance.repositories.CustomerRepository;
 import com.ernestocesario.myclothes.persistance.repositories.DiscountCodeRepository;
 import com.ernestocesario.myclothes.services.interfaces.DiscountCodeService;
@@ -25,30 +27,31 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
     private final CustomerRepository customerRepository;
 
     private final RandomStringGenerator randomStringGenerator = new RandomStringGenerator.Builder().withinRange('0', '9').get();
+    private final IsCustomer isCustomer;
+    private final IsAdmin isAdmin;
 
     @Override
     @Transactional
-    public Page<DiscountCode> getDiscountCodesOfCustomer(Pageable pageable) {
-        User user = userServiceImpl.getCurrentUser();
-        if (!user.isCustomer())
-            throw new InternalServerErrorException();
+    public Page<DiscountCode> getMyDiscountCodes(Pageable pageable) {
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
         Sort sort = Sort.by(Sort.Direction.DESC, "discountPercentage");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
-        Customer customer = (Customer) user;
+        Customer customer = (Customer) userServiceImpl.getCurrentUser();
         return discountCodeRepository.findAllByCustomer(customer, pageable);
     }
 
     @Override
     @Transactional
-    public boolean addDiscountCodeToCustomer(int discountCodePercentage, String customerEmail) {  //only admin and system
+    public boolean addDiscountCodeToCustomer(int discountCodePercentage, String customerEmail, boolean isSystem) {  //only admin and system
+        if(!isSystem)
+            AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         if (discountCodePercentage < 0 || discountCodePercentage > 100)
             throw new InvalidInputException();
 
-        Customer customer = customerRepository.findByEmail(customerEmail);
-        if (customer == null)
-            throw new InvalidInputException();
+        Customer customer = customerRepository.findByEmail(customerEmail).orElseThrow(InvalidInputException::new);
 
         DiscountCode discountCode = new DiscountCode();
         discountCode.setCustomer(customer);
@@ -61,7 +64,10 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
 
     @Override
     @Transactional
-    public boolean removeDiscountCodeById(String discountCodeId) {  //only admin and system
+    public boolean removeDiscountCodeById(String discountCodeId, boolean isSystem) {  //only admin and system
+        if(!isSystem)
+            AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
         DiscountCode discountCode = discountCodeRepository.findById(discountCodeId).orElse(null);
         if (discountCode == null)
             throw new InternalServerErrorException();

@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) {  //only system
         User user = userRepository.findByEmail(email);
 
         if(user == null)
@@ -32,10 +32,5 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUserDetails appUserDetails = (AppUserDetails) authentication.getPrincipal();
         return appUserDetails.user();
-    }
-
-    @Override
-    public boolean isCurrentUserAdmin() {
-        return getCurrentUser().getRole().equals(UserRole.ADMIN);
     }
 }

@@ -10,16 +10,15 @@ import java.util.List;
 public interface WishlistService {
     Page<Wishlist> getAllPublicWishlists(Pageable pageable);
     Page<Wishlist> getAllPublicWishlistsByKeyword(String keyword, Pageable pageable);
-    Page<Wishlist> getMyWishlists(Pageable pageable);  //only admin
+    Page<Wishlist> getMyWishlists(Pageable pageable);  //only customer
     Page<Wishlist> getWishlistSharedWithMe(Pageable pageable);  //only customers
-    Page<Wishlist> getWishlistsOfCustomer(String customerId, Pageable pageable);  //only admin
     Wishlist getWishlistById(String wishlistId);
 
     boolean createWishlist(String wishlistName);  //only customer
     boolean deleteWishlist(String wishlistId);
     boolean modifyWishlistVisibility(String wishlistId, boolean isPublic);  //only customer
     boolean shareWishlist(String wishlistId, String recipientCustomerEmail);  //only customer
-    boolean unshareWishlist(String wishlistId, Customer recipientCustomer);  //only customer
+    boolean unshareWishlist(String wishlistId, String recipientCustomerEmail);  //only customer
     boolean addProductVariantToWishlist(String wishlistId, String productVariantId);  //only customer
     boolean removeProductVariantFromWishlist(String wishlistId, String productVariantId);  //only customer
 }
