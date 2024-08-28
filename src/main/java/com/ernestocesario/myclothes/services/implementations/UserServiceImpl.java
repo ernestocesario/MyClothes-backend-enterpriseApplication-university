@@ -7,6 +7,7 @@ import com.ernestocesario.myclothes.persistance.repositories.UserRepository;
 import com.ernestocesario.myclothes.services.interfaces.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+
+    @Value("${testing}")
+    private boolean testing;
 
     @Override
     @Transactional
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getCurrentUser() {
+        if (testing)
+            return null;
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUserDetails appUserDetails = (AppUserDetails) authentication.getPrincipal();
         return appUserDetails.user();

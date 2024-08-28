@@ -8,6 +8,7 @@ import com.ernestocesario.myclothes.persistance.entities.Product;
 import com.ernestocesario.myclothes.persistance.entities.ProductPicture;
 import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductCategory;
+import com.ernestocesario.myclothes.persistance.repositories.ProductPictureRepository;
 import com.ernestocesario.myclothes.persistance.repositories.ProductRepository;
 import com.ernestocesario.myclothes.persistance.repositories.ProductVariantRepository;
 import com.ernestocesario.myclothes.services.interfaces.ProductService;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductVariantRepository productVariantRepository;
     private final IsAdmin isAdmin;
     private final UserServiceImpl userServiceImpl;
+    private final ProductPictureRepository productPictureRepository;
 
     @Override
     @Transactional
@@ -152,6 +155,27 @@ public class ProductServiceImpl implements ProductService {
 
         return true;
     }
+
+    @Override
+    @Transactional
+    public boolean setProductVariantPictures(String productVariantId, List<ProductPicture> productPictures) {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
+        ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElseThrow(InternalServerErrorException::new);
+
+        List<ProductPicture> existingPictures = productVariant.getPictures();
+        if (!existingPictures.isEmpty()) {
+            productPictureRepository.deleteAll(existingPictures);
+            productVariant.getPictures().clear();
+        }
+
+        productPictures.forEach(picture -> picture.setProductVariant(productVariant));
+
+        productPictureRepository.saveAll(productPictures);
+
+        return true;
+    }
+
 
 
     //private methods

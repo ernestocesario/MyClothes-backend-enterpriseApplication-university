@@ -17,6 +17,4 @@ public interface UserMapper {
     @Mapping(target = "accessToken", source = "accessToken")
     @Mapping(target = "refreshToken", source = "refreshToken")
     AuthResponseDTO toAuthResponseDTO(User user);
-
-
 }

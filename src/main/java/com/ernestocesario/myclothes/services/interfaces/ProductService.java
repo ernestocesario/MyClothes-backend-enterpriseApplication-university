@@ -22,4 +22,5 @@ public interface ProductService {
     boolean deleteProductAndItsVariants(String productId);  //only admin
     boolean updateProductOnly(Product product);  //only admin
     boolean updateProductVariant(ProductVariant productVariant);  //only admin
+    boolean setProductVariantPictures(String productVariantId, List<ProductPicture> productPictures);  //only admin
 }

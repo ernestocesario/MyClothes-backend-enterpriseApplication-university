@@ -1,4 +1,4 @@
-package com.ernestocesario.myclothes.configurations.constants.product;
+package com.ernestocesario.myclothes.configurations.constants.review;
 
 public class ReviewConstants {
     private ReviewConstants() {}  // Prevent instantiation

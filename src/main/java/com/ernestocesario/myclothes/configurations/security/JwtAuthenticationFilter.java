@@ -28,16 +28,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwtToken = getJwtToken(request);
 
-        if(!jwtService.validateAccessToken(jwtToken))
-            throw new SecurityException("Access token is not valid");
+        if(jwtToken != null) {
+            if (!jwtService.validateAccessToken(jwtToken))
+                throw new SecurityException("Access token is not valid");
 
-        String email = jwtService.getSubject(jwtToken);
-        User user = userService.getUserByEmail(email);
-        AppUserDetails appUserDetails = new AppUserDetails(user);
+            String email = jwtService.getSubject(jwtToken);
+            User user = userService.getUserByEmail(email);
+            AppUserDetails appUserDetails = new AppUserDetails(user);
 
-        var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(appUserDetails, null, appUserDetails.getAuthorities());
-        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(appUserDetails, null, appUserDetails.getAuthorities());
+            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        }
 
         filterChain.doFilter(request, response);
     }

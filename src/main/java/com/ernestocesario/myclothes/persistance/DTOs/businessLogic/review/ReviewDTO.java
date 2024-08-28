@@ -1,7 +1,6 @@
 package com.ernestocesario.myclothes.persistance.DTOs.businessLogic.review;
 
-import com.ernestocesario.myclothes.configurations.constants.product.ReviewConstants;
-import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.FullProductVariantDTO;
+import com.ernestocesario.myclothes.configurations.constants.review.ReviewConstants;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.ProductDTO;
 import com.ernestocesario.myclothes.persistance.entities.utils.ReviewStars;
 import jakarta.persistence.EnumType;
@@ -22,7 +21,7 @@ public class ReviewDTO {
     @Size(min = ReviewConstants.MIN_REVIEW_TITLE_LENGTH, max = ReviewConstants.MAX_REVIEW_TITLE_LENGTH)
     private String title;
 
-    @NotBlank
+    @NotNull
     @Size(min = ReviewConstants.MIN_REVIEW_CONTENT_LENGTH, max = ReviewConstants.MAX_REVIEW_CONTENT_LENGTH)
     private String content;
 

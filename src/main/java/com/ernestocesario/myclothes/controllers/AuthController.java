@@ -8,14 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/auth", produces = "application/json")
+@RequestMapping(value = "${authControllerPath}", produces = "application/json")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthServiceImpl authServiceImpl;
 
-    @PostMapping("/login")
+    @PostMapping("${loginAuthControllerSubPath}")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody String idTokenString) throws InvalidGoogleIdTokenException {
         AuthResponseDTO authResponseDTO = authServiceImpl.login(idTokenString);
         return ResponseEntity.ok(authResponseDTO);

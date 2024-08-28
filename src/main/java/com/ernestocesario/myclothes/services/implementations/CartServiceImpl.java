@@ -81,7 +81,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public boolean updateProductInCart(String productVariantId, int quantity) {
+    public boolean updateProductQuantity(String productVariantId, int quantity) {
         AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
         Customer customer = (Customer) userServiceImpl.getCurrentUser();

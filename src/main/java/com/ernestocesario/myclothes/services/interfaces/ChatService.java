@@ -12,7 +12,7 @@ public interface ChatService {
     Page<Chat> getAllActiveChats(Pageable pageable);
     Chat getChatById(String chatId);
 
-    boolean startChat();
+    Chat startChat();
     boolean terminateChat(String chatId);
     boolean sendMessage(String chatId, String message);
 }

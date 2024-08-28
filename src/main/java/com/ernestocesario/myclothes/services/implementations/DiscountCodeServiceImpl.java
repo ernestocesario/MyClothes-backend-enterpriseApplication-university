@@ -19,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DiscountCodeServiceImpl implements DiscountCodeService {
@@ -32,14 +34,11 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
 
     @Override
     @Transactional
-    public Page<DiscountCode> getMyDiscountCodes(Pageable pageable) {
+    public List<DiscountCode> getMyDiscountCodes() {
         AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "discountPercentage");
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
-        return discountCodeRepository.findAllByCustomer(customer, pageable);
+        return discountCodeRepository.findAllByCustomer(customer);
     }
 
     @Override

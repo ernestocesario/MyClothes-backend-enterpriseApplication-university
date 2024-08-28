@@ -14,6 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
+    /* Entity to DTO */
     @Named("toProductDTOFromProduct")
     @Mapping(target = "productId", source = "id")
     @Mapping(target = "brand", source = "brand")
@@ -38,6 +39,7 @@ public interface ProductMapper {
     @Mapping(target = "productVariantId", source = "id")
     @Mapping(target = "gender", source = "gender")
     @Mapping(target = "style", source = "style")
+    @Mapping(target = "stock", source = "stock")
     @Mapping(target = "size", source = "size")
     @Mapping(target = "price", source = "price")
     ProductVariantDTO toProductVariantDTO(ProductVariant productVariant);
@@ -65,6 +67,7 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "category")
     @Mapping(target = "gender", source = "gender")
     @Mapping(target = "style", source = "style")
+    @Mapping(target = "stock", constant = "0")
     @Mapping(target = "size", source = "size")
     @Mapping(target = "price", source = "price")
     FullProductVariantDTO toFullProductVariantDTO(ProductSnapshot productSnapshot);
@@ -84,6 +87,48 @@ public interface ProductMapper {
     @Mapping(target = "fullProductVariantDTO", source = "productSnapshot", qualifiedByName = "toFullProductVariantDTOFromProductSnapshot")
     ProductRequestDTO toProductRequestDTO(OrderProduct orderProduct);
 
+    @Mapping(target = "productVariantId", source = "productVariant.id")
+    @Mapping(target = "image", source = "image")
+    ProductPictureDTO toProductPictureDTO(ProductPicture productPicture);
+
+
+
+    /* DTO to Entity */
+
+    @Named("toProductFromProductDTO")
+    @Mapping(target = "id", source = "productId")
+    @Mapping(target = "brand", source = "brand")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "category", source = "category")
+    Product toProduct(ProductDTO productDTO);
+
+    @Named("toProductFromFullProductVariantDTO")
+    @Mapping(target = "id", source = "productId")
+    @Mapping(target = "brand", source = "brand")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "category", source = "category")
+    Product toProduct(FullProductVariantDTO fullProductVariantDTO);
+
+    default ProductVariant toProductVariant(FullProductVariantDTO fullProductVariantDTO) {
+        Product product = toProduct(fullProductVariantDTO);
+
+        ProductVariant productVariant = new ProductVariant();
+        productVariant.setId(fullProductVariantDTO.getProductVariantId());
+        productVariant.setProduct(product);
+        productVariant.setGender(fullProductVariantDTO.getGender());
+        productVariant.setStyle(fullProductVariantDTO.getStyle());
+        productVariant.setStock(fullProductVariantDTO.getStock());
+        productVariant.setSize(fullProductVariantDTO.getSize());
+        productVariant.setPrice(fullProductVariantDTO.getPrice());
+
+        return productVariant;
+    }
+
+    @Mapping(target = "id" , constant = "null")
+    @Mapping(target = "image", source = "image")
+    ProductPicture toProductPicture(ProductPictureDTO productPictureDTO);
 
 
     // Utility methods

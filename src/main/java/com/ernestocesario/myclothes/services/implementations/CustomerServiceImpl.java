@@ -4,6 +4,7 @@ import com.ernestocesario.myclothes.configurations.security.authorization.Author
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.customer.CustomerOwnCustomerOrIsAdmin;
+import com.ernestocesario.myclothes.exceptions.InvalidInputException;
 import com.ernestocesario.myclothes.exceptions.customer.InsufficientCustomerBalanceException;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.customer.InvalidCustomerShippingInfoException;
@@ -28,7 +29,6 @@ public class CustomerServiceImpl implements CustomerService {
     private final ChatRepository chatRepository;
     private final CustomerRepository customerRepository;
     private final UserServiceImpl userServiceImpl;
-    private final CustomerShippingInfoServiceImpl customerShippingInfoServiceImpl;
     private final IsAdmin isAdmin;
     private final CustomerOwnCustomerOrIsAdmin customerOwnCustomerOrIsAdmin;
     private final IsCustomer isCustomer;
@@ -98,6 +98,9 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer == null)
             throw new InternalServerErrorException();
 
+        if (amount <= 0)
+            throw new InvalidInputException();
+
         modifyCustomerBalance(customer, amount);
         customerRepository.save(customer);
 
@@ -113,6 +116,9 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer == null)
             throw new InternalServerErrorException();
 
+        if (amount <= 0)
+            throw new InvalidInputException();
+
         modifyCustomerBalance(customer, -amount);
         customerRepository.save(customer);
 
@@ -125,9 +131,6 @@ public class CustomerServiceImpl implements CustomerService {
         AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
-
-        if (!customerShippingInfoServiceImpl.validateShippingInfo(customerShippingInfo))
-            throw new InvalidCustomerShippingInfoException();
 
         customer.setShippingInfo(customerShippingInfo);
         customerRepository.save(customer);

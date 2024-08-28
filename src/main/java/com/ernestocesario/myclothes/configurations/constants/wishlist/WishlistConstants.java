@@ -1,4 +1,4 @@
-package com.ernestocesario.myclothes.configurations.constants.product;
+package com.ernestocesario.myclothes.configurations.constants.wishlist;
 
 public class WishlistConstants {
     private WishlistConstants() {}  // Prevent instantiation

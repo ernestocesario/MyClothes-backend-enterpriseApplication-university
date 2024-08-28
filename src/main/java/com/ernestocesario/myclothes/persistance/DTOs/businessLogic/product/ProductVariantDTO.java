@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,9 @@ public class ProductVariantDTO {
     @NotNull
     @Size(min = ProductConstants.MIN_PRODUCT_VARIANT_STYLE_LENGTH, max = ProductConstants.MAX_PRODUCT_VARIANT_STYLE_LENGTH)
     private String style;
+
+    @PositiveOrZero
+    private int stock;
 
     @NotNull
     @Enumerated(EnumType.STRING)

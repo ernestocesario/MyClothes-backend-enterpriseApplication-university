@@ -64,7 +64,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Transactional
-    public boolean startChat() {  //only customers
+    public Chat startChat() {  //only customers
         AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
@@ -74,9 +74,8 @@ public class ChatServiceImpl implements ChatService {
 
         Chat chat = new Chat();
         chat.setCustomer(customer);
-        chatRepository.save(chat);
 
-        return true;
+        return chatRepository.save(chat);
     }
 
     @Override
