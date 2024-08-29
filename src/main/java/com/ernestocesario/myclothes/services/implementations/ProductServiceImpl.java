@@ -20,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -86,13 +85,16 @@ public class ProductServiceImpl implements ProductService {
 
         boolean somethingChanged = false;
         Product product = productVariant.getProduct();
+        Product productFound = productRepository.findByBrandAndNameAndCategory(product.getBrand(), product.getName(), product.getCategory());
 
-        if(!checkProductExistance(product)) {  //General Product do not exist, and it needs to be added
+        if(productFound == null) {  //General Product do not exist, and it needs to be added
             productRepository.save(product);
             somethingChanged = true;
         }
+        else
+            productVariant.setProduct(productFound);
 
-        if(!checkProductVariantExistance(productVariant)) {  //Product Variant of the General Product do not exist, and it needs to be added
+        if(!checkProductVariantExistence(productVariant)) {  //Product Variant of the General Product do not exist, and it needs to be added
             productVariantRepository.save(productVariant);
             somethingChanged = true;
         }
@@ -109,7 +111,13 @@ public class ProductServiceImpl implements ProductService {
         AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
 
         ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElseThrow(InternalServerErrorException::new);
+        Product product = productVariant.getProduct();
+        int numberOfProductVariants = product.getProductVariants().size();
+
         productVariantRepository.delete(productVariant);
+
+        if (numberOfProductVariants == 1)
+            productRepository.delete(product);
 
         return true;
     }
@@ -130,12 +138,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public boolean updateProductOnly(Product product) {  //here only the properties of Product are set. Not its variants.
+    public boolean updateProductOnly(Product updatedProduct) {  //here only the properties of Product are set. Not its variants.
         AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
 
         //check if the product exists. If not throw an exception.
-        if (productRepository.existsById(product.getId()))
-            throw new InternalServerErrorException();
+        Product product = productRepository.findById(updatedProduct.getId()).orElseThrow(InternalServerErrorException::new);
+
+        product.setBrand(updatedProduct.getBrand());
+        product.setName(updatedProduct.getName());
+        product.setDescription(updatedProduct.getDescription());
+        product.setCategory(updatedProduct.getCategory());
 
         productRepository.save(product);
 
@@ -144,12 +156,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public boolean updateProductVariant(ProductVariant productVariant) {
+    public boolean updateProductVariant(ProductVariant updatedProductVariant) {  //here only the properties of ProductVariant are set. Not its base product.
         AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
 
         //check if the productVariant exists. If not throw an exception.
-        if (productVariantRepository.existsById(productVariant.getId()))
-            throw new InternalServerErrorException();
+        ProductVariant productVariant = productVariantRepository.findById(updatedProductVariant.getId()).orElseThrow(InternalServerErrorException::new);
+
+        productVariant.setGender(updatedProductVariant.getGender());
+        productVariant.setStyle(updatedProductVariant.getStyle());
+        productVariant.setSize(updatedProductVariant.getSize());
+        productVariant.setStock(updatedProductVariant.getStock());
+        productVariant.setPrice(updatedProductVariant.getPrice());
 
         productVariantRepository.save(productVariant);
 
@@ -178,12 +195,8 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-    //private methods
-    private boolean checkProductExistance(Product product) {
-        return productRepository.existsByBrandAndName(product.getBrand(), product.getName());
-    }
-
-    private boolean checkProductVariantExistance(ProductVariant productVariant) {
-        return productVariantRepository.existsByGenderAndStyleAndSize(productVariant.getGender(), productVariant.getStyle(), productVariant.getSize());
+    //Private methods
+    private boolean checkProductVariantExistence(ProductVariant productVariant) {
+        return productVariantRepository.existsByProduct_IdAndGenderAndStyleAndSize(productVariant.getProduct().getId(), productVariant.getGender(), productVariant.getStyle(), productVariant.getSize());
     }
 }

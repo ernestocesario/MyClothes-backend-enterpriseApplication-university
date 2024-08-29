@@ -26,12 +26,12 @@ public class ProductVariantDTO {
     @Size(min = ProductConstants.MIN_PRODUCT_VARIANT_STYLE_LENGTH, max = ProductConstants.MAX_PRODUCT_VARIANT_STYLE_LENGTH)
     private String style;
 
-    @PositiveOrZero
-    private int stock;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private ProductSize size;
+
+    @PositiveOrZero
+    private int stock;
 
     @Positive
     private double price;

@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
@@ -87,6 +89,7 @@ public class ChatServiceImpl implements ChatService {
         AuthorizationChecker.check(customerOwnChatOrIsAdmin, userServiceImpl.getCurrentUser(), chatId);
 
         chat.setActive(false);
+        chat.setClosingTime(LocalDateTime.now());
         chatRepository.save(chat);
 
         return true;

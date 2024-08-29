@@ -111,17 +111,19 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "category")
     Product toProduct(FullProductVariantDTO fullProductVariantDTO);
 
-    default ProductVariant toProductVariant(FullProductVariantDTO fullProductVariantDTO) {
+    @Mapping(target = "id", source = "productVariantId")
+    @Mapping(target = "gender", source = "gender")
+    @Mapping(target = "style", source = "style")
+    @Mapping(target = "size", source = "size")
+    @Mapping(target = "stock", source = "stock")
+    @Mapping(target = "price", source = "price")
+    ProductVariant toProductVariantFromProductVariantDTO(ProductVariantDTO productVariantDTO);
+
+    default ProductVariant toProductVariantFromFullProductVariantDTO(FullProductVariantDTO fullProductVariantDTO) {
         Product product = toProduct(fullProductVariantDTO);
 
-        ProductVariant productVariant = new ProductVariant();
-        productVariant.setId(fullProductVariantDTO.getProductVariantId());
+        ProductVariant productVariant = toProductVariantFromProductVariantDTO(fullProductVariantDTO);
         productVariant.setProduct(product);
-        productVariant.setGender(fullProductVariantDTO.getGender());
-        productVariant.setStyle(fullProductVariantDTO.getStyle());
-        productVariant.setStock(fullProductVariantDTO.getStock());
-        productVariant.setSize(fullProductVariantDTO.getSize());
-        productVariant.setPrice(fullProductVariantDTO.getPrice());
 
         return productVariant;
     }

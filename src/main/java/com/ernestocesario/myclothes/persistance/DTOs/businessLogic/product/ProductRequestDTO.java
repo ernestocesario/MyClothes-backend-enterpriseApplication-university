@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ProductRequestDTO {
-    @Positive
     private int quantity;
-
-    @Valid
     private FullProductVariantDTO fullProductVariantDTO;
 }

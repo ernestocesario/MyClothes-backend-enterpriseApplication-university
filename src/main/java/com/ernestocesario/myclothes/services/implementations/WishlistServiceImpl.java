@@ -4,7 +4,7 @@ import com.ernestocesario.myclothes.configurations.security.authorization.Author
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlist;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrCustomerHasAccessWishlist;
-import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrCustomerHasAccessWishlistOrIsAdminAndWishlistPublic;
+import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.WishlistPublicOrCustomerOwnWishlistOrCustomerHasAccessWishlist;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrIsAdminAndWishlistPublic;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
@@ -25,7 +25,7 @@ public class WishlistServiceImpl implements WishlistService {
     private final WishlistRepository wishlistRepository;
     private final UserServiceImpl userServiceImpl;
     private final IsCustomer isCustomer;
-    private final CustomerOwnWishlistOrCustomerHasAccessWishlistOrIsAdminAndWishlistPublic customerOwnWishlistOrCustomerHasAccessWishlistOrIsAdminAndWishlistPublic;
+    private final WishlistPublicOrCustomerOwnWishlistOrCustomerHasAccessWishlist wishlistPublicOrCustomerOwnWishlistOrCustomerHasAccessWishlist;
     private final CustomerOwnWishlistOrIsAdminAndWishlistPublic customerOwnWishlistOrIsAdminAndWishlistPublic;
     private final CustomerOwnWishlist customerOwnWishlist;
     private final CustomerRepository customerRepository;
@@ -67,7 +67,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     @Transactional
-    public Page<Wishlist> getWishlistSharedWithMe(Pageable pageable) {
+    public Page<Wishlist> getWishlistsSharedWithMe(Pageable pageable) {
         AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
@@ -81,7 +81,7 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     @Transactional
     public Wishlist getWishlistById(String wishlistId) {
-        AuthorizationChecker.check(customerOwnWishlistOrCustomerHasAccessWishlistOrIsAdminAndWishlistPublic, userServiceImpl.getCurrentUser(), wishlistId);
+        AuthorizationChecker.check(wishlistPublicOrCustomerOwnWishlistOrCustomerHasAccessWishlist, userServiceImpl.getCurrentUser(), wishlistId);
 
         return wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
     }

@@ -2,6 +2,7 @@ package com.ernestocesario.myclothes.services.implementations;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationChecker;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
+import com.ernestocesario.myclothes.exceptions.InvalidInputException;
 import com.ernestocesario.myclothes.persistance.entities.Cart;
 import com.ernestocesario.myclothes.persistance.entities.CartElement;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
@@ -44,7 +45,7 @@ public class CartServiceImpl implements CartService {
 
         ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElse(null);
         if (productVariant == null)
-            return false;
+            throw new InvalidInputException();
 
         CartElement cartElement = CartElement.builder()
                 .quantity(quantity)

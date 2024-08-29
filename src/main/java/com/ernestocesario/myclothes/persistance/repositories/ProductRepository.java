@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findAllByNameContainingIgnoreCase(String keyword, Pageable pageable);
     Page<Product> findAllByCategory(ProductCategory productCategory, Pageable pageable);
-    boolean existsByBrandAndName(String brand, String name);
+    Product findByBrandAndNameAndCategory(String brand, String name, ProductCategory productCategory);
 }

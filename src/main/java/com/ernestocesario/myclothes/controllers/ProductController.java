@@ -2,17 +2,13 @@ package com.ernestocesario.myclothes.controllers;
 
 import com.ernestocesario.myclothes.configurations.mappers.businessLogic.ProductMapper;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
-import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.FullProductDTO;
-import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.FullProductVariantDTO;
-import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.ProductDTO;
-import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.ProductPictureDTO;
+import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.product.*;
 import com.ernestocesario.myclothes.persistance.entities.Product;
 import com.ernestocesario.myclothes.persistance.entities.ProductPicture;
 import com.ernestocesario.myclothes.persistance.entities.ProductVariant;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductCategory;
 import com.ernestocesario.myclothes.services.implementations.ProductServiceImpl;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +71,7 @@ public class ProductController {
         if (bindingResult.hasErrors())
             throw new InvalidInputException();
 
-        ProductVariant productVariant = productMapper.toProductVariant(fullProductVariantDTO);
+        ProductVariant productVariant = productMapper.toProductVariantFromFullProductVariantDTO(fullProductVariantDTO);
         productServiceImpl.addNewProduct(productVariant);
         return ResponseEntity.ok().build();
     }
@@ -104,17 +100,20 @@ public class ProductController {
     }
 
     @PatchMapping("${productVariantProductsControllerSubPath}")
-    public ResponseEntity<Void> updateProductVariant(@Valid @RequestBody FullProductVariantDTO fullProductVariantDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors() || StringUtils.hasLength(fullProductVariantDTO.getProductId()))
+    public ResponseEntity<Void> updateProductVariant(@Valid @RequestBody ProductVariantDTO productVariantDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors() || StringUtils.hasLength(productVariantDTO.getProductId()))
             throw new InvalidInputException();
 
-        ProductVariant productVariant = productMapper.toProductVariant(fullProductVariantDTO);
+        ProductVariant productVariant = productMapper.toProductVariantFromProductVariantDTO(productVariantDTO);
         productServiceImpl.updateProductVariant(productVariant);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("${picturesProductVariantProductsControllerSubPath}")
-    public ResponseEntity<Void> setProductVariantPictures(@Valid @NotEmpty @RequestBody List<ProductPictureDTO> productPictureDTOs) {
+    public ResponseEntity<Void> setProductVariantPictures(@Valid @RequestBody List<ProductPictureDTO> productPictureDTOs, BindingResult bindingResult) {
+        if (bindingResult.hasErrors() || productPictureDTOs == null || productPictureDTOs.isEmpty())
+            throw new InvalidInputException();
+
         //check that all the productPictureDTOs have the same productVariantId
         if (productPictureDTOs.stream().map(ProductPictureDTO::getProductVariantId).distinct().count() != 1)
             throw new InvalidInputException();

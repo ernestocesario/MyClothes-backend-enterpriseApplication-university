@@ -1,6 +1,7 @@
 package com.ernestocesario.myclothes.configurations.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,16 +20,27 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Value("${testing}")
+    private boolean testing;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                                .anyRequest().permitAll()/*
+        if (testing)
+            http
+                    .authorizeHttpRequests((authorize) -> authorize
+                            .anyRequest().permitAll()
+                    );
+        else
+            http
+                    .authorizeHttpRequests((authorize) -> authorize
+                                .anyRequest().permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
-                                .anyRequest().authenticated()*/                         //TODO remove the comment
-                );
+                                .anyRequest().authenticated()
+                    );
+
+
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http

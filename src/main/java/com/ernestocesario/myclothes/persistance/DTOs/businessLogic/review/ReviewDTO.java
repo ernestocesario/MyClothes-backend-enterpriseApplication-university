@@ -30,7 +30,4 @@ public class ReviewDTO {
     private ReviewStars stars;
 
     private String username;
-
-    @Valid
-    private ProductDTO productDTO;
 }

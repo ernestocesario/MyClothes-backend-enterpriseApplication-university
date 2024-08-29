@@ -3,6 +3,7 @@ package com.ernestocesario.myclothes.controllers;
 import com.ernestocesario.myclothes.exceptions.auth.InvalidGoogleIdTokenException;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.users.AuthResponseDTO;
 import com.ernestocesario.myclothes.services.implementations.AuthServiceImpl;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

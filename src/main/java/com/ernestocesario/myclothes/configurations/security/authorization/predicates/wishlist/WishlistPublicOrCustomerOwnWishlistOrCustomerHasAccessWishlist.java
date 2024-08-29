@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerOwnWishlistOrCustomerHasAccessWishlistOrIsAdminAndWishlistPublic extends AuthorizationTest {
+public class WishlistPublicOrCustomerOwnWishlistOrCustomerHasAccessWishlist extends AuthorizationTest {
     private final WishlistRepository wishlistRepository;
     private final CustomerOwnWishlistOrCustomerHasAccessWishlist customerOwnWishlistOrCustomerHasAccessWishlist;
     private final IsAdminAndWishlistPublic isAdminAndWishlistPublic;
@@ -26,7 +26,7 @@ public class CustomerOwnWishlistOrCustomerHasAccessWishlistOrIsAdminAndWishlistP
 
         Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
 
-        if (isAdminAndWishlistPublic.test(user, wishlist))
+        if (wishlist.isPub())
             return true;
 
         return customerOwnWishlistOrCustomerHasAccessWishlist.test(user, wishlistId);
