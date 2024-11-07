@@ -1,5 +1,6 @@
 package com.ernestocesario.myclothes.configurations.security;
 
+import com.ernestocesario.myclothes.configurations.exceptionHandlers.FilterExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final FilterExceptionHandler filterExceptionHandler;
 
     @Value("${testing}")
     private boolean testing;
@@ -35,7 +37,6 @@ public class SecurityConfig {
         else
             http
                     .authorizeHttpRequests((authorize) -> authorize
-                                .anyRequest().permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .anyRequest().authenticated()
                     );
@@ -44,7 +45,8 @@ public class SecurityConfig {
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(filterExceptionHandler, JwtAuthenticationFilter.class);
 
         return http.build();
     }

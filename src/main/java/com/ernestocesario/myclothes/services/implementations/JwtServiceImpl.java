@@ -76,7 +76,7 @@ public class JwtServiceImpl implements JwtService {
 
 
     //private methods
-    private void generateToken(User user, AuthTokenType authTokenType, long expirationTime) throws JOSEException, ParseException {
+    private void generateToken(User user, AuthTokenType authTokenType, long expirationTime) throws JOSEException {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
                 .expirationTime(new Date(System.currentTimeMillis() + expirationTime))
@@ -111,8 +111,18 @@ public class JwtServiceImpl implements JwtService {
                 return false;
 
             return switch (authTokenType) {
-                case ACCESS_TOKEN -> user.getAccessToken().equals(signedJWT.serialize());
-                case REFRESH_TOKEN -> user.getRefreshToken().equals(signedJWT.serialize());
+                case ACCESS_TOKEN -> {
+                    if (user.getAccessToken() == null)
+                        yield false;
+                    else
+                        yield user.getAccessToken().equals(signedJWT.serialize());
+                }
+                case REFRESH_TOKEN -> {
+                    if (user.getRefreshToken() == null)
+                        yield false;
+                    else
+                        yield user.getRefreshToken().equals(signedJWT.serialize());
+                }
             };
         }
         catch (ParseException | JOSEException e) {

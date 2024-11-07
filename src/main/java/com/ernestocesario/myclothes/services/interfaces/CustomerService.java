@@ -10,6 +10,7 @@ public interface CustomerService {
     Page<Customer> getListOfAllCustomers(Pageable pageable);
     Page<Customer> getListOfCustomersByKeyword(String keyword, Pageable pageable);
     Page<Customer> getListOfAllBannedCustomers(Pageable pageable);
+    Customer getMe();
     Customer getCustomer(String id);
 
     boolean setCustomerLimitations(String customerId, boolean isBanned);

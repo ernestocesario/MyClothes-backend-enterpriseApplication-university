@@ -41,7 +41,7 @@ public class User {
     @LastModifiedDate
     private LocalDateTime lastModificationDate;
 
-    @Column(name = "access_token")
+    @Column(name = "access_token", nullable = true)
     private String accessToken;
 
     @Column(name = "refresh_token")

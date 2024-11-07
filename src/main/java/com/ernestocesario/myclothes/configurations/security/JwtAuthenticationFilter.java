@@ -1,5 +1,6 @@
 package com.ernestocesario.myclothes.configurations.security;
 
+import com.ernestocesario.myclothes.exceptions.auth.InvalidAccessTokenException;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import com.ernestocesario.myclothes.services.implementations.JwtServiceImpl;
 import com.ernestocesario.myclothes.services.implementations.UserServiceImpl;
@@ -28,9 +29,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwtToken = getJwtToken(request);
 
-        if(jwtToken != null) {
+        if (jwtToken != null) {
             if (!jwtService.validateAccessToken(jwtToken))
-                throw new SecurityException("Access token is not valid");
+                throw new InvalidAccessTokenException();
 
             String email = jwtService.getSubject(jwtToken);
             User user = userService.getUserByEmail(email);
@@ -45,12 +46,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
-
     //private methods
     private String getJwtToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
 
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
             return authorizationHeader.substring(7);
         return null;
     }

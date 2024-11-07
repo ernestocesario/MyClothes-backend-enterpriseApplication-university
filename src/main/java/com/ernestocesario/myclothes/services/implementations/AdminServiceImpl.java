@@ -31,4 +31,12 @@ public class AdminServiceImpl implements AdminService {
 
         return adminRepository.findAll(pageable);
     }
+
+    @Override
+    @Transactional
+    public Admin getMe() {
+        AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
+
+        return (Admin) userServiceImpl.getCurrentUser();
+    }
 }

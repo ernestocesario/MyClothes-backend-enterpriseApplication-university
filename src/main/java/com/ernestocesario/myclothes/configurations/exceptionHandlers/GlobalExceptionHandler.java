@@ -16,21 +16,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     private final ExceptionMapper exceptionMapper;
 
-    @Value("${testing}")
-    private boolean testing;
-
-    @ExceptionHandler(ApplicationException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionDTO onApplicationException(ApplicationException e) {
-        return exceptionMapper.toExceptionDTO(e);
-    }
-
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionDTO onException(Exception e) {
-        if (testing)
-            return exceptionMapper.toExceptionDTO(e);
-
-        return exceptionMapper.toExceptionDTO(new InternalServerErrorException());
+        return exceptionMapper.toExceptionDTO(e);
     }
 }

@@ -1,4 +1,4 @@
-package com.ernestocesario.myclothes.persistance.DTOs.businessLogic.users;
+package com.ernestocesario.myclothes.persistance.DTOs.businessLogic.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -10,6 +10,6 @@ public class AuthResponseDTO {
     @NotBlank
     private String AccessToken;
 
-    @NotBlank
-    private String RefreshToken;
+    //@NotBlank
+    //private String RefreshToken;
 }

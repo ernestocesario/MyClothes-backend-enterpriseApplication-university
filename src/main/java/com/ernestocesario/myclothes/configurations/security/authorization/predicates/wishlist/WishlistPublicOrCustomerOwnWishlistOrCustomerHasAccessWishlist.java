@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class WishlistPublicOrCustomerOwnWishlistOrCustomerHasAccessWishlist extends AuthorizationTest {
     private final WishlistRepository wishlistRepository;
     private final CustomerOwnWishlistOrCustomerHasAccessWishlist customerOwnWishlistOrCustomerHasAccessWishlist;
-    private final IsAdminAndWishlistPublic isAdminAndWishlistPublic;
 
     @Override
     protected boolean argumentCheck(Object... objects) {

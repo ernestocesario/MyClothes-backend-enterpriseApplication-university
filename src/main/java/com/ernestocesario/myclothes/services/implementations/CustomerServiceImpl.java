@@ -68,6 +68,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
+    public Customer getMe() {
+        AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
+
+        return (Customer) userServiceImpl.getCurrentUser();
+    }
+
+    @Override
+    @Transactional
     public Customer getCustomer(String customerId) {
         AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
 

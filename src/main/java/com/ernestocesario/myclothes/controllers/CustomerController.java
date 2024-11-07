@@ -39,6 +39,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerPage.map(customerMapper::toCustomerProfileDTO));
     }
 
+    @GetMapping("${selfInfoCustomersControllerSubPath}")
+    public ResponseEntity<CustomerProfileDTO> getMe() {
+        Customer customer = customerServiceImpl.getMe();
+        return ResponseEntity.ok(customerMapper.toCustomerProfileDTO(customer));
+    }
+
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerProfileDTO> getCustomer(@PathVariable String customerId) {
         Customer customer = customerServiceImpl.getCustomer(customerId);

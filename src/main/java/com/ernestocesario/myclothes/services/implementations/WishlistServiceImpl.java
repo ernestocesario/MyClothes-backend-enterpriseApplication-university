@@ -8,6 +8,7 @@ import com.ernestocesario.myclothes.configurations.security.authorization.predic
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrIsAdminAndWishlistPublic;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
+import com.ernestocesario.myclothes.exceptions.wishlist.WishlistAlreadySharedWithCustomerException;
 import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.repositories.*;
 import com.ernestocesario.myclothes.services.interfaces.WishlistService;
@@ -136,6 +137,9 @@ public class WishlistServiceImpl implements WishlistService {
 
         Customer recipientCustomer = customerRepository.findByEmail(recipientCustomerEmail).orElseThrow(InvalidInputException::new);
         Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
+
+        if (wishlistShareRepository.findByWishlistAndCustomer_Email(wishlist, recipientCustomerEmail).isPresent())
+            throw new WishlistAlreadySharedWithCustomerException();
 
         WishlistShare wishlistShare = new WishlistShare();
         wishlistShare.setWishlist(wishlist);

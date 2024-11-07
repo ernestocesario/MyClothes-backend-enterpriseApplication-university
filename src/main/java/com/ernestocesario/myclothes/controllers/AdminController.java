@@ -29,4 +29,10 @@ public class AdminController {
 
         return ResponseEntity.ok(userProfileDTOPage);
     }
+
+    @GetMapping("${selfInfoAdminsControllerSubPath}")
+    public ResponseEntity<UserProfileDTO> getMe() {
+        Admin admin = adminServiceImpl.getMe();
+        return ResponseEntity.ok(userMapper.toUserProfileDTO(admin));
+    }
 }

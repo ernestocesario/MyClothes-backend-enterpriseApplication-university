@@ -1,6 +1,6 @@
 package com.ernestocesario.myclothes.configurations.mappers.businessLogic;
 
-import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.users.AuthResponseDTO;
+import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.auth.AuthResponseDTO;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.users.UserProfileDTO;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import org.mapstruct.Mapper;
@@ -15,6 +15,6 @@ public interface UserMapper {
     UserProfileDTO toUserProfileDTO(User user);
 
     @Mapping(target = "accessToken", source = "accessToken")
-    @Mapping(target = "refreshToken", source = "refreshToken")
+    //@Mapping(target = "refreshToken", source = "refreshToken")
     AuthResponseDTO toAuthResponseDTO(User user);
 }
