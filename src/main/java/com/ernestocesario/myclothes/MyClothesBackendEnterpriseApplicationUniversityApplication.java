@@ -15,6 +15,7 @@ public class MyClothesBackendEnterpriseApplicationUniversityApplication {
         SpringApplication.run(MyClothesBackendEnterpriseApplicationUniversityApplication.class, args);
     }
 
+    /*
     @Autowired
     private TestService testService;
 
@@ -25,4 +26,5 @@ public class MyClothesBackendEnterpriseApplicationUniversityApplication {
             testService.test2();
         };
     }
+     */
 }
