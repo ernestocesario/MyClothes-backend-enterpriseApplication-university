@@ -2,6 +2,7 @@ package com.ernestocesario.myclothes.configurations.security.authorization.predi
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationTest;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
+import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,6 @@ public class CustomerOwnCustomerOrIsAdmin extends AuthorizationTest {
     protected boolean contextCheck(User user, Object... objects) {
         String customerId = (String) objects[0];
 
-        return isAdmin.test(user) || user.getId().equals(customerId);
+        return isAdmin.test(user) || (user instanceof Customer && user.getId().equals(customerId));
     }
 }

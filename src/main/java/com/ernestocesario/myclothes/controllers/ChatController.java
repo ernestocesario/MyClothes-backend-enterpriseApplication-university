@@ -4,8 +4,10 @@ import com.ernestocesario.myclothes.configurations.mappers.businessLogic.ChatMap
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.chat.ChatDTO;
 import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.chat.FullChatDTO;
+import com.ernestocesario.myclothes.persistance.DTOs.businessLogic.chat.MessageDTO;
 import com.ernestocesario.myclothes.persistance.entities.Chat;
 import com.ernestocesario.myclothes.services.implementations.ChatServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,11 +49,8 @@ public class ChatController {
     }
 
     @PostMapping("/{chatId}")
-    public ResponseEntity<Void> sendMessage(@PathVariable String chatId, @RequestBody String message) {
-        if (!StringUtils.hasLength(message))
-            throw new InvalidInputException();
-
-        chatServiceImpl.sendMessage(chatId, message);
+    public ResponseEntity<Void> sendMessage(@PathVariable String chatId, @Valid @RequestBody MessageDTO messageDTO) {
+        chatServiceImpl.sendMessage(chatId, messageDTO.getContent());
         return ResponseEntity.ok().build();
     }
 

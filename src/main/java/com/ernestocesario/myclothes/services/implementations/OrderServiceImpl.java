@@ -5,8 +5,10 @@ import com.ernestocesario.myclothes.configurations.security.authorization.predic
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.customer.CustomerOwnCustomerOrIsAdmin;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.order.CustomerOwnOrderOrIsAdmin;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
+import com.ernestocesario.myclothes.exceptions.customer.CustomerNotExistsException;
 import com.ernestocesario.myclothes.exceptions.discountCode.InvalidDiscountCodeException;
 import com.ernestocesario.myclothes.exceptions.order.OrderCannotBeCancelledException;
+import com.ernestocesario.myclothes.exceptions.order.OrderNotExistsException;
 import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.entities.utils.OrderStatus;
 import com.ernestocesario.myclothes.persistance.entities.utils.ProductSnapshot;
@@ -42,9 +44,7 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> getAllOrdersOfCustomer(String customerId, Pageable pageable) {
         AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
 
-        Customer customer = customerRepository.findById(customerId).orElse(null);
-        if (customer == null)
-            throw new InternalServerErrorException();
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerNotExistsException::new);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "orderDate");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
@@ -57,9 +57,7 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(String orderId) {
         AuthorizationChecker.check(customerOwnOrderOrIsAdmin, userServiceImpl.getCurrentUser(), orderId);
 
-        Order order = orderRepository.findById(orderId).orElse(null);
-        if (order == null)
-            throw new InternalServerErrorException();
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotExistsException::new);
 
         return order;
     }
@@ -113,9 +111,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean cancelOrder(String orderId) {
         AuthorizationChecker.check(customerOwnOrderOrIsAdmin, userServiceImpl.getCurrentUser(), orderId);
 
-        Order order = orderRepository.findById(orderId).orElse(null);
-        if (order == null)
-            throw new InternalServerErrorException();
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotExistsException::new);
 
         if (order.getOrderStatus() != OrderStatus.PENDING)
             throw new OrderCannotBeCancelledException();

@@ -5,6 +5,7 @@ import com.ernestocesario.myclothes.configurations.security.authorization.predic
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.customer.CustomerOwnCustomerOrIsAdmin;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
+import com.ernestocesario.myclothes.exceptions.customer.CustomerNotExistsException;
 import com.ernestocesario.myclothes.exceptions.customer.InsufficientCustomerBalanceException;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.customer.InvalidCustomerShippingInfoException;
@@ -79,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getCustomer(String customerId) {
         AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
 
-        return customerRepository.findById(customerId).orElseThrow(InternalServerErrorException::new);
+        return customerRepository.findById(customerId).orElseThrow(CustomerNotExistsException::new);
     }
 
     @Override
@@ -87,9 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean setCustomerLimitations(String customerId, boolean isBanned) {
         AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
 
-        Customer customer = customerRepository.findById(customerId).orElse(null);
-        if (customer == null)
-            throw new InternalServerErrorException();
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerNotExistsException::new);
 
         customer.setBanned(isBanned);
         customerRepository.save(customer);
@@ -102,9 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean addBalanceToCustomer(String customerId, double amount) {
         AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
 
-        Customer customer = customerRepository.findById(customerId).orElse(null);
-        if (customer == null)
-            throw new InternalServerErrorException();
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerNotExistsException::new);
 
         if (amount <= 0)
             throw new InvalidInputException();
@@ -120,9 +117,7 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean removeBalanceFromCustomer(String customerId, double amount) {
         AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
 
-        Customer customer = customerRepository.findById(customerId).orElse(null);
-        if (customer == null)
-            throw new InternalServerErrorException();
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerNotExistsException::new);
 
         if (amount <= 0)
             throw new InvalidInputException();
@@ -152,8 +147,6 @@ public class CustomerServiceImpl implements CustomerService {
         AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
         User user = userServiceImpl.getCurrentUser();
-        if (!user.isCustomer())
-            throw new InternalServerErrorException();
 
         Customer customer = (Customer) user;
         customerRepository.delete(customer);

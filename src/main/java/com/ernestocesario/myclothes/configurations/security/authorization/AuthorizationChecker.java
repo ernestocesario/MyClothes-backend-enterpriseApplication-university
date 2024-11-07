@@ -35,12 +35,7 @@ public class AuthorizationChecker {
             return;
         */
 
-        try {
-            if (!authorizationTest.test(user, objects))
-                throw new InvalidAuthorizationException();
-        }
-        catch (Exception e) {
+        if (!authorizationTest.test(user, objects))
             throw new InvalidAuthorizationException();
-        }
     }
 }

@@ -8,7 +8,12 @@ import com.ernestocesario.myclothes.configurations.security.authorization.predic
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist.CustomerOwnWishlistOrIsAdminAndWishlistPublic;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
+import com.ernestocesario.myclothes.exceptions.customer.CustomerNotExistsException;
+import com.ernestocesario.myclothes.exceptions.product.ProductVariantNotExistsException;
 import com.ernestocesario.myclothes.exceptions.wishlist.WishlistAlreadySharedWithCustomerException;
+import com.ernestocesario.myclothes.exceptions.wishlist.WishlistNotExistsException;
+import com.ernestocesario.myclothes.exceptions.wishlist.WishlistProductNotExistsException;
+import com.ernestocesario.myclothes.exceptions.wishlist.WishlistShareNotExistsException;
 import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.repositories.*;
 import com.ernestocesario.myclothes.services.interfaces.WishlistService;
@@ -84,7 +89,7 @@ public class WishlistServiceImpl implements WishlistService {
     public Wishlist getWishlistById(String wishlistId) {
         AuthorizationChecker.check(wishlistPublicOrCustomerOwnWishlistOrCustomerHasAccessWishlist, userServiceImpl.getCurrentUser(), wishlistId);
 
-        return wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
+        return wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
     }
 
     @Override
@@ -108,9 +113,7 @@ public class WishlistServiceImpl implements WishlistService {
     public boolean deleteWishlist(String wishlistId) {
         AuthorizationChecker.check(customerOwnWishlistOrIsAdminAndWishlistPublic, userServiceImpl.getCurrentUser(), wishlistId);
 
-        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElse(null);
-        if (wishlist == null)
-            throw new InternalServerErrorException();
+        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
 
         wishlistRepository.delete(wishlist);
 
@@ -122,7 +125,7 @@ public class WishlistServiceImpl implements WishlistService {
     public boolean modifyWishlistVisibility(String wishlistId, boolean isPublic) {
         AuthorizationChecker.check(customerOwnWishlist, userServiceImpl.getCurrentUser(), wishlistId);
 
-        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
+        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
 
         wishlist.setPub(isPublic);
         wishlistRepository.save(wishlist);
@@ -135,8 +138,8 @@ public class WishlistServiceImpl implements WishlistService {
     public boolean shareWishlist(String wishlistId, String recipientCustomerEmail) {
         AuthorizationChecker.check(customerOwnWishlist, userServiceImpl.getCurrentUser(), wishlistId);
 
-        Customer recipientCustomer = customerRepository.findByEmail(recipientCustomerEmail).orElseThrow(InvalidInputException::new);
-        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
+        Customer recipientCustomer = customerRepository.findByEmail(recipientCustomerEmail).orElseThrow(CustomerNotExistsException::new);
+        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
 
         if (wishlistShareRepository.findByWishlistAndCustomer_Email(wishlist, recipientCustomerEmail).isPresent())
             throw new WishlistAlreadySharedWithCustomerException();
@@ -155,9 +158,9 @@ public class WishlistServiceImpl implements WishlistService {
     public boolean unshareWishlist(String wishlistId, String recipientCustomerEmail) {
         AuthorizationChecker.check(customerOwnWishlistOrCustomerHasAccessWishlist, userServiceImpl.getCurrentUser(), wishlistId);
 
-        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
+        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
 
-        WishlistShare wishlistShare = wishlistShareRepository.findByWishlistAndCustomer_Email(wishlist, recipientCustomerEmail).orElseThrow(InternalServerErrorException::new);
+        WishlistShare wishlistShare = wishlistShareRepository.findByWishlistAndCustomer_Email(wishlist, recipientCustomerEmail).orElseThrow(WishlistShareNotExistsException::new);
         wishlistShareRepository.delete(wishlistShare);
 
         return true;
@@ -168,8 +171,8 @@ public class WishlistServiceImpl implements WishlistService {
     public boolean addProductVariantToWishlist(String wishlistId, String productVariantId) {
         AuthorizationChecker.check(customerOwnWishlist, userServiceImpl.getCurrentUser(), wishlistId);
 
-        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
-        ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElseThrow(InternalServerErrorException::new);
+        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
+        ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElseThrow(ProductVariantNotExistsException::new);
 
         WishlistProduct wishlistProduct = new WishlistProduct();
         wishlistProduct.setWishlist(wishlist);
@@ -185,10 +188,10 @@ public class WishlistServiceImpl implements WishlistService {
     public boolean removeProductVariantFromWishlist(String wishlistId, String productVariantId) {
         AuthorizationChecker.check(customerOwnWishlist, userServiceImpl.getCurrentUser(), wishlistId);
 
-        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
-        ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElseThrow(InternalServerErrorException::new);
+        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
+        ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElseThrow(ProductVariantNotExistsException::new);
 
-        WishlistProduct wishlistProduct = wishlistProductRepository.findByWishlistAndProductVariant(wishlist, productVariant).orElseThrow(InternalServerErrorException::new);
+        WishlistProduct wishlistProduct = wishlistProductRepository.findByWishlistAndProductVariant(wishlist, productVariant).orElseThrow(WishlistProductNotExistsException::new);
 
         wishlistProductRepository.delete(wishlistProduct);
 

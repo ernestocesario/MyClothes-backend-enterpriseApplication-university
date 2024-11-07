@@ -6,6 +6,8 @@ import com.ernestocesario.myclothes.configurations.security.authorization.predic
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.chat.CustomerOwnChatOrIsAdmin;
 import com.ernestocesario.myclothes.exceptions.chat.ActiveChatAlreadyExistsForCustomerException;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
+import com.ernestocesario.myclothes.exceptions.chat.ChatNotActiveException;
+import com.ernestocesario.myclothes.exceptions.chat.ChatNotExistsException;
 import com.ernestocesario.myclothes.persistance.entities.*;
 import com.ernestocesario.myclothes.persistance.repositories.ChatRepository;
 import com.ernestocesario.myclothes.persistance.repositories.MessageRepository;
@@ -58,7 +60,7 @@ public class ChatServiceImpl implements ChatService {
     @Transactional
     public Chat getChatById(String chatId) {
         if (!chatRepository.existsById(chatId))
-            throw new InternalServerErrorException();
+            throw new ChatNotExistsException();
         AuthorizationChecker.check(customerOwnChatOrIsAdmin, userServiceImpl.getCurrentUser(), chatId);
 
         return chatRepository.findById(chatId).orElse(null);
@@ -83,9 +85,8 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public boolean terminateChat(String chatId) {
-        Chat chat = chatRepository.findById(chatId).orElse(null);
-        if (chat == null)
-            throw new InternalServerErrorException();
+        Chat chat = chatRepository.findById(chatId).orElseThrow(ChatNotExistsException::new);
+
         AuthorizationChecker.check(customerOwnChatOrIsAdmin, userServiceImpl.getCurrentUser(), chatId);
 
         chat.setActive(false);
@@ -103,9 +104,9 @@ public class ChatServiceImpl implements ChatService {
         User currentUser = userServiceImpl.getCurrentUser();
         boolean fromCustomer = currentUser.isCustomer();
 
-        Chat chat = chatRepository.findById(chatId).orElse(null);
-        if (chat == null || !chat.isActive())
-            throw new InternalServerErrorException();
+        Chat chat = chatRepository.findById(chatId).orElseThrow(ChatNotExistsException::new);
+        if (!chat.isActive())
+            throw new ChatNotActiveException();
 
         Message message = new Message();
         message.setChat(chat);

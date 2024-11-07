@@ -83,7 +83,7 @@ public class ProductController {
     }
 
     @DeleteMapping("${productProductsControllerSubPath}/{productId}")
-    public ResponseEntity<Void> deleteProductAndItsVariant(@PathVariable String productId) {
+    public ResponseEntity<Void> deleteProductAndItsVariants(@PathVariable String productId) {
         productServiceImpl.deleteProductAndItsVariants(productId);
         return ResponseEntity.ok().build();
     }

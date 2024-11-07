@@ -6,6 +6,9 @@ import com.ernestocesario.myclothes.configurations.security.authorization.predic
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsAdmin;
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
+import com.ernestocesario.myclothes.exceptions.customer.CustomerNotExistsException;
+import com.ernestocesario.myclothes.exceptions.product.ProductNotExistsException;
+import com.ernestocesario.myclothes.exceptions.review.ReviewNotExistsException;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.Product;
 import com.ernestocesario.myclothes.persistance.entities.Review;
@@ -36,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public Page<Review> getAllReviewsOfProduct(String productId, Pageable pageable) {
-        Product product = productRepository.findById(productId).orElseThrow(InternalServerErrorException::new);
+        Product product = productRepository.findById(productId).orElseThrow(ProductNotExistsException::new);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "stars");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
@@ -49,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Page<Review> getAllReviewsOfCustomer(String customerId, Pageable pageable) {
         AuthorizationChecker.check(customerOwnCustomerOrIsAdmin, userServiceImpl.getCurrentUser(), customerId);
 
-        Customer customer = customerRepository.findById(customerId).orElseThrow(InternalServerErrorException::new);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerNotExistsException::new);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "stars");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
@@ -71,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public Review getReviewById(String reviewId) {
-        return reviewRepository.findById(reviewId).orElseThrow(InternalServerErrorException::new);
+        return reviewRepository.findById(reviewId).orElseThrow(ReviewNotExistsException::new);
     }
 
     @Override
@@ -80,7 +83,7 @@ public class ReviewServiceImpl implements ReviewService {
         AuthorizationChecker.check(isCustomer, userServiceImpl.getCurrentUser());
 
         Customer customer = (Customer) userServiceImpl.getCurrentUser();
-        Product product = productRepository.findById(productId).orElseThrow(InternalServerErrorException::new);
+        Product product = productRepository.findById(productId).orElseThrow(ProductNotExistsException::new);
 
         review.setCustomer(customer);
         review.setProduct(product);
@@ -95,7 +98,7 @@ public class ReviewServiceImpl implements ReviewService {
     public boolean removeReviewFromProduct(String reviewId) {
         AuthorizationChecker.check(customerOwnReviewOrIsAdmin, userServiceImpl.getCurrentUser(), reviewId);
 
-        Review review = reviewRepository.findById(reviewId).orElseThrow(InternalServerErrorException::new);
+        Review review = reviewRepository.findById(reviewId).orElseThrow(ReviewNotExistsException::new);
         reviewRepository.delete(review);
 
         return true;

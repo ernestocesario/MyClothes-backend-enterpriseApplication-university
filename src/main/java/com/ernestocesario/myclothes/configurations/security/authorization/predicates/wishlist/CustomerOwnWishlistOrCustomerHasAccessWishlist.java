@@ -1,7 +1,7 @@
 package com.ernestocesario.myclothes.configurations.security.authorization.predicates.wishlist;
 
 import com.ernestocesario.myclothes.configurations.security.authorization.AuthorizationTest;
-import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
+import com.ernestocesario.myclothes.exceptions.wishlist.WishlistNotExistsException;
 import com.ernestocesario.myclothes.persistance.entities.User;
 import com.ernestocesario.myclothes.persistance.entities.Wishlist;
 import com.ernestocesario.myclothes.persistance.repositories.WishlistRepository;
@@ -24,7 +24,7 @@ public class CustomerOwnWishlistOrCustomerHasAccessWishlist extends Authorizatio
     protected boolean contextCheck(User user, Object... objects) {
         String wishlistId = (String) objects[0];
 
-        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(InternalServerErrorException::new);
+        Wishlist wishlist = wishlistRepository.findById(wishlistId).orElseThrow(WishlistNotExistsException::new);
 
         if (customerOwnWishlist.test(user, wishlistId))
             return true;

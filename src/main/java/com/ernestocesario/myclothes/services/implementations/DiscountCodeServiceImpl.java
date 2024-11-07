@@ -5,6 +5,7 @@ import com.ernestocesario.myclothes.configurations.security.authorization.predic
 import com.ernestocesario.myclothes.configurations.security.authorization.predicates.user.IsCustomer;
 import com.ernestocesario.myclothes.exceptions.InternalServerErrorException;
 import com.ernestocesario.myclothes.exceptions.InvalidInputException;
+import com.ernestocesario.myclothes.exceptions.discountCode.DiscountCodeNotExistsException;
 import com.ernestocesario.myclothes.persistance.entities.Customer;
 import com.ernestocesario.myclothes.persistance.entities.DiscountCode;
 import com.ernestocesario.myclothes.persistance.repositories.CustomerRepository;
@@ -67,9 +68,7 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
         if(!isSystem)
             AuthorizationChecker.check(isAdmin, userServiceImpl.getCurrentUser());
 
-        DiscountCode discountCode = discountCodeRepository.findById(discountCodeId).orElse(null);
-        if (discountCode == null)
-            throw new InternalServerErrorException();
+        DiscountCode discountCode = discountCodeRepository.findById(discountCodeId).orElseThrow(DiscountCodeNotExistsException::new);
 
         discountCodeRepository.delete(discountCode);
         return true;
