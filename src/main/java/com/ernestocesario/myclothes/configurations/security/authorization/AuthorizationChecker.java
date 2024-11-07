@@ -13,7 +13,7 @@ import java.io.IOException;
 public class AuthorizationChecker {
     private AuthorizationChecker() {}  //no instantiation
 
-    //TODO remove this after testing
+    /*
     //only for testing purposes
     static {
         ConfigurableEnvironment environment = new StandardEnvironment(); // Crea un ambiente Spring
@@ -28,10 +28,12 @@ public class AuthorizationChecker {
     }
 
     private static final boolean testing;
+     */
 
     public static void check(AuthorizationTest authorizationTest, User user, Object... objects) {
-        if (testing)
+        /*if (testing)
             return;
+        */
 
         try {
             if (!authorizationTest.test(user, objects))
